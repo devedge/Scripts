@@ -3,7 +3,7 @@
 This script parses all of the java files in a directory and its subdirectories
 to find the longest method
 
-[find_longest_java_method.py](https://github.com/devedge/Scripts/blob/master/Parse%20longest%20java%20method/find_longest_java_method.py) (Single python file)
+[find_longest_java_method.py](https://github.com/devedge/Scripts/blob/master/Parse%20longest%20java%20method/find_longest_java_method.py)
 
 To use, run 
 
