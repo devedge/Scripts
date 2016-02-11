@@ -10,6 +10,3 @@ To use, run
 `python find_longest_java_method.py` 
 
 and specify an absolute path to a folder to search. The Java file that contains the longest method will have its full path printed out to the console, along with the number of lines it spans, and the number of Java files that were searched.
-
-
-`(TODO clean up description)`
