@@ -26,8 +26,8 @@ def main():
 
     path = input("Enter the absolute path to the folder: ")
 
-    print "Searching..."
-    print " "
+    print("Searching...")
+    print(" ")
 
     # Iterate over the current directory and all of its subdirectories
     for root, dirs, files in os.walk(path):
@@ -39,16 +39,17 @@ def main():
                 fileCount += 1
 
 
-    print "File with longest method: " + str(longestFileName)
-    print "             with length: " + str(maxLineCount)
-    print " "
-    print "Number of files searched: " + str(fileCount)
+    print("File with longest method: " + str(longestFileName))
+    print("             with length: " + str(maxLineCount))
+    print(" ")
+    print("Number of files searched: " + str(fileCount))
 
 
 
 # parse a java file to find the longest method
 def parse_java_longest_method(name):
     
+    # REGEX pattern to find a Java method declaration
     pattern = "((public|private|protected|static|final|native|synchronized|abstract|transient)+\s)+[\$_\w\.\<\>\[\]]*\s+[\$_\w\.]+\([^\)]*\)?\s*\{?[^\}]*\}?"
 
     global maxLineCount
