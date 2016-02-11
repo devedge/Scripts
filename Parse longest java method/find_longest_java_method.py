@@ -6,13 +6,15 @@ import re
 # This script parses all of the java files in a directory and its subdirectories
 # to find the longest method
 
-# To use, run `python find_longest_java_method.py` and specify an absolute path to a folder 
-# to search. The Java file with the longest method will be printed out to the console 
-# (full pathname), the number of lines it spans, and the number of Java files that were 
-# searched.
+# To use, run "python find_longest_java_method.py" and specify an absolute path to 
+# a folder to search. The Java file that contains the longest method will have its 
+# full path printed out to the console, along with the number of lines it spans, 
+# and the number of Java files that were searched.
+
 
 fileCount = 0
 maxLineCount = 0
+methodLineStart = 0
 longestFileName = ""
 
 # Main method
@@ -23,6 +25,7 @@ def main():
     global fileCount
     global maxLineCount
     global longestFileName
+    global methodLineStart
 
     path = input("Enter the absolute path to the folder: ")
 
@@ -39,8 +42,10 @@ def main():
                 fileCount += 1
 
 
-    print("File with longest method: " + str(longestFileName))
-    print("             with length: " + str(maxLineCount))
+    print("File with longest method: ")
+    print(str(longestFileName))
+    print(" ")
+    print("Method starts at line " + str(methodLineStart) + " and has a length of " + str(maxLineCount) + " lines")
     print(" ")
     print("Number of files searched: " + str(fileCount))
 
@@ -54,6 +59,7 @@ def parse_java_longest_method(name):
 
     global maxLineCount
     global longestFileName
+    global methodLineStart
 
     currentLineStart = 0
     currentLineCount = 0
@@ -84,6 +90,7 @@ def parse_java_longest_method(name):
                 if ( (currentLineCount - currentLineStart) > maxLineCount):
                     maxLineCount = currentLineCount - currentLineStart
                     longestFileName = name
+                    methodLineStart = currentLineStart
                     
                 method = False
 
