@@ -13,9 +13,13 @@ smallBindIndex = 8
 bigBindIndex = 9
 gameWonIndex = 10
 gameLostIndex = 11
+firstUserIndex = 12
 
 # a dead dealer will have a value of 0
 # should initialize the gamearray here once, and provide a method to wipe it after use
+
+def getGame(gameIDX):
+    return 4 # gameList[gameIDX - 1]
 
 # get id
 # Returns an int
@@ -34,7 +38,7 @@ def getTime(gameArray):
 
 # Returns a boolean
 def gameWon(gameArray):
-    return bool(gameArray[3])
+    return bool(gameArray[10][0])
 
 # 
 
@@ -43,7 +47,7 @@ def gameWon(gameArray):
 # returns the first user if no user number is specified
 # Returns a string
 def getUserID(gameArray, numUser = 1):
-    return gameArray[12 + numUser][1]
+    return gameArray[firstUserIndex - 1 + numUser][0]
 
 # instead of getting just a winner ID, what if we got the entire winner array?
 
@@ -66,14 +70,14 @@ def getWinnerID(gameArray):
 
 
 
-# to access everythink played by round:
+# to access everything played by round:
 #                13                6
 # for x in range(playerarraystart, getNumPlayers()):
 #    do something to each player
 
 
 def getPlayerAction(playerID, playNumber):
-    print("yeye")
+    print("asdf")
     # if check return check
     # if bet return bet and amount
     # if call return call and amount

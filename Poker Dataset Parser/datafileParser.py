@@ -109,7 +109,6 @@ def parseFile(datafile):
             # This is the second line of a new game, so extract and
             # save the dealer seat number from the line.
             elif (re.search("Table", line)):
-                print(line)
                 line = line.split()
 
                  # len(line) - 4 
@@ -172,7 +171,7 @@ def parseFile(datafile):
                             # Since the players are all saved, update the gameArray's info
                             # Save the number of players
                             gameArray[6] = len(tempPlayerArray)
-                            print(linenumber)
+
                             # Set the dealer player
                             gameArray[7] = tempPlayerIndex.index(dealerSeat) + 1
 

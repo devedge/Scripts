@@ -1,16 +1,14 @@
  
 # ask for a directory to scan (recursive?)
 
-# for every file in the directory, call datafileParser.py
+# pass the directory to parserAPI.py
 
-# after each game datafileParser.py finishes, it calls a method here.
-# the method here receives the gameArray. 
-# using the methods in parserAPI.py, it retrieves the requested data and 
-#   saves it in a csv file
+# in parserAPI.py, after each file parsed, 
+#   call a method here for storing the array results in a csv file
 
-# the gameArray array has all of the necessary data from every game
-
+# the method here for creating the csv file can call helper methods
+#   from parserAPI.py to get relevant data
 
 
-
-# (what if instead of returning each game, it returned an array of all of the games?)
+# all that has to be changed here is how the data will explicitly be
+#   saved in the csv file
