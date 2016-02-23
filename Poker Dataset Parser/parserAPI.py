@@ -14,7 +14,7 @@ bigBindIndex = 9
 gameWonIndex = 10
 gameLostIndex = 11
 
-
+# a dead dealer will have a value of 0
 # should initialize the gamearray here once, and provide a method to wipe it after use
 
 # get id

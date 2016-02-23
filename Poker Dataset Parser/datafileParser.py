@@ -1,16 +1,11 @@
-
 import re
-# from decimal import Decimal
 
-# the file is parsed like a state machine (will have to do it anyway since every line needs to be parsed)
-# as each line is processed, counters and indices are updated to reflect the current state of the 
-#   lines being processed
-
-# small blinds are $5
-# big blinds are $10
+# the data file is parsed line by line
+# as each line is being processed, variables keep track of where in the file the 
+#       current line is.
 
 # player numbers are assigned in the order they appear
-# their IDs and number are stored in two different arrays to quickly reference just over the current parsing
+# their IDs and number are stored in two different arrays for temporary reference
 
 firstGame = True
 currentSector = "init"
@@ -57,18 +52,18 @@ def initPlayerInstance():
     global playerArrayInstance
 
     playerArrayInstance =   [
-                                "NULL",  # player ID
-                                0.0,     # dollars in chips
-                                [["NA"]], 
-                                [["NA"]], 
-                                [["NA"]], 
-                                [["NA"]], 
-                                [["NA"]]
+                                "NULL",     # player ID
+                                0.0,        # dollars in chips
+                                [["NA"]],   # user actions during the Pocket Cards
+                                [["NA"]],   # user actions during the flop
+                                [["NA"]],   # user actions during the turn
+                                [["NA"]],   # user actions during the river
+                                [["NA"]]    # user actions during the showdown
                             ]
 
 
 
-file = "/home/usr/dataset-test.txt"
+file = "/home/usr/dataset-50.txt"
 
 
 def parseFile(datafile):
@@ -85,29 +80,18 @@ def parseFile(datafile):
     seatCounter = 0
 
     with open(datafile, 'r') as f:
-        # pocketCards = False
-        # flop = False
-        # turn = False
-        # river = False
-        # showdown = False
 
-        # OR
-        # declare the current sector we're in and another statement will 
-        # currentSector = "init" # pocketCards, flop, turn, river, showdown, summary (need to initialize here?)
-        # numPlayers = 0
+        linenumber = 0
 
         # Parse the file line by line
         for line in f:
 
-            # This is the first line of a game, so (return the results of 
-            # the last game?) and reset all of the per-game variables.
+            linenumber += 1
+            # This is the first line of a game, so reset all of the per-game variables.
             # Then, extract the gameID, date, and time & timezone. 
             if (re.search("Stage", line)):
-                # return the results of the last game?
-                
-
+               
                 # reset all the per-game variables
-                # tempPlayerArray, tempPlayerIndex, playerArrayInstance, gameArray
                 tempPlayerArray = []
                 tempPlayerIndex = []
                 initPlayerInstance()
@@ -125,10 +109,12 @@ def parseFile(datafile):
             # This is the second line of a new game, so extract and
             # save the dealer seat number from the line.
             elif (re.search("Table", line)):
+                print(line)
                 line = line.split()
 
-                # doesn't work if the table has two-worded name (should work now)
-                dealerSeat = int(line[ len(line) - 4 ].replace("#", "")) 
+                 # len(line) - 4 
+
+                dealerSeat = int(line[line.index("Seat") + 1].replace("#", "")) 
 
             elif (re.search("\*\*\* POCKET CARDS \*\*\*", line)):
                 currentSector = "pocketCards"
@@ -163,7 +149,7 @@ def parseFile(datafile):
 
                     # Extract the seat assignments, user IDs, and dollar amount in chips per
                     # user
-                    if (re.search("Seat", line)): #splitline[0] == "Seat"
+                    if (re.search("Seat", line)):
                         # append an initialized playerArrayInstance to the gameArray
                         initPlayerInstance()
                         gameArray.append(playerArrayInstance)
@@ -186,7 +172,7 @@ def parseFile(datafile):
                             # Since the players are all saved, update the gameArray's info
                             # Save the number of players
                             gameArray[6] = len(tempPlayerArray)
-
+                            print(linenumber)
                             # Set the dealer player
                             gameArray[7] = tempPlayerIndex.index(dealerSeat) + 1
 
@@ -214,7 +200,7 @@ def parseFile(datafile):
                     if (re.search("Total Pot", line)):
                         line = line.split()
 
-                        gameArray[5] = float(line[1].replace("Pot($", "").replace(")", ""))
+                        gameArray[5] = float(line[1].replace("Pot($", "").replace(")", "").replace(",", ""))
 
                     # Extract the board configuration from the line
                     elif (re.search("Board", line)):
@@ -237,51 +223,13 @@ def parseFile(datafile):
 
                         if (seatCounter == gameArray[6]):
                             seatCounter = 0
-                            # print(gameArray)
                             gamesList.append(gameArray)
-                            # if not firstGame:
-                            #     gamesList.append(gameArray)
-                            #     # print(gameArray)
-                            # else:
-                            #     firstGame = False
-                   
-    somevalue = 2
-    print(" ")
-    # print(gamesList[0])
-    # print(" ")
-    # print(gamesList[1])
-    # print(" ")
-    print(gamesList[somevalue][0:10])
-    print(" ")
-    print(gamesList[somevalue][10])
-    print(" ")
-    print(gamesList[somevalue][11])
-    print(" ")
-    print(gamesList[somevalue][12])
-    print(" ")
-    print(gamesList[somevalue][13])
-    print(" ")
-
-    print(gamesList[somevalue][14])
-    print(" ")
-    print(gamesList[somevalue][14][2])
-    print(gamesList[somevalue][14][3])
-    print(gamesList[somevalue][14][4])
-    print(gamesList[somevalue][14][5])
-    print(gamesList[somevalue][14][6])
-
-    print(" ")
-
-    print(gamesList[somevalue][15])
-    print(" ")
-    print(gamesList[somevalue][16])
-    print(" ")
-    # print(gamesList[somevalue][16])
-    # print(" ")
-    # print(gamesList[3])
-    print(" ")
+    
+    # once all of the games in a file have been parsed, return the list
+    return gamesList
 
 
+# Parse a user's action from a line and save the results in the gameArray
 def extractUserAction(line, sectorIDX):
 
     action = line[2]
@@ -289,11 +237,11 @@ def extractUserAction(line, sectorIDX):
 
     if (action == "Bets"):
         actionEntry.append("Bets")
-        actionEntry.append(float(line[3].replace("$", "")))
+        actionEntry.append(float(line[3].replace("$", "").replace(",", "")))
 
     elif (action == "Calls"):
         actionEntry.append("Calls")
-        actionEntry.append(float(line[3].replace("$", "")))
+        actionEntry.append(float(line[3].replace("$", "").replace(",", "")))
 
     elif (action == "Raises"):
         actionEntry.append("Raises")
@@ -301,7 +249,7 @@ def extractUserAction(line, sectorIDX):
 
     elif (action == "returned"):
         actionEntry.append("returned")
-        actionEntry.append(float(line[3].replace("($", "").replace(")", "")))
+        actionEntry.append(float(line[3].replace("($", "").replace(")", "").replace(",", "")))
 
     elif (action == "Shows"):
         actionEntry.append("Shows")
@@ -309,19 +257,61 @@ def extractUserAction(line, sectorIDX):
 
     elif (line[1] == "Collects"):
         actionEntry.append("Collects")
-        actionEntry.append(float(line[2].replace("$", "")))
+        actionEntry.append(float(line[2].replace("$", "").replace(",", "")))
 
     elif (action == "Does"):
         actionEntry.append("Does not show")
 
     else:
-        actionEntry.append(action) # check, fold and muck
+        actionEntry.append(action) # check, fold, or muck
 
-    if(gameArray[11 + tempPlayerArray.index(line[0]) + 1][sectorIDX][0][0] == "NA"):
-        gameArray[11 + tempPlayerArray.index(line[0]) + 1][sectorIDX][0] = actionEntry
+    playerIDX = 11 + tempPlayerArray.index(line[0]) + 1
+
+    if(gameArray[playerIDX][sectorIDX][0][0] == "NA"):
+        gameArray[playerIDX][sectorIDX][0] = actionEntry
     else:                        
-        gameArray[11 + tempPlayerArray.index(line[0]) + 1][sectorIDX].append(actionEntry)
+        gameArray[playerIDX][sectorIDX].append(actionEntry)
 
 
 
-parseFile(file)
+
+####### Testing and debugging #######
+newlist = parseFile(file)
+
+print(newlist[300])
+
+# somevalue = 2
+# print(" ")
+# # print(newlist[0])
+# # print(" ")
+# # print(newlist[1])
+# # print(" ")
+# print(newlist[somevalue][0:10])
+# print(" ")
+# print(newlist[somevalue][10])
+# print(" ")
+# print(newlist[somevalue][11])
+# print(" ")
+# print(newlist[somevalue][12])
+# print(" ")
+# print(newlist[somevalue][13])
+# print(" ")
+
+# print(newlist[somevalue][14])
+# print(" ")
+# # print(newlist[somevalue][14][2])
+# # print(newlist[somevalue][14][3])
+# # print(newlist[somevalue][14][4])
+# # print(newlist[somevalue][14][5])
+# # print(newlist[somevalue][14][6])
+
+# # print(" ")
+
+# print(newlist[somevalue][15])
+# print(" ")
+# print(newlist[somevalue][16])
+# print(" ")
+# # print(newlist[somevalue][16])
+# # print(" ")
+# # print(newlist[3])
+# print(" ")
