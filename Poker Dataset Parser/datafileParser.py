@@ -80,24 +80,14 @@ def parseFile(datafile):
     initGameArray()
     initPlayerInstance()
 
-    # seatCounter = 0
-
     with open(datafile, 'r') as f:
-
-        # linenumber = 0
-        # numTimesStageSeen = 0
-        # timesAppended = 0
-        # timesAlmostAppended = 0
-        
 
         # Parse the file line by line
         for line in f:
 
-            # linenumber += 1
             # This is the first line of a game, so reset all of the per-game variables.
             # Then, extract the gameID, date, and time & timezone. 
             if (re.search("Stage", line)):
-                # numTimesStageSeen += 1
                
                 # reset all the per-game variables
                 tempPlayerArray = []
@@ -187,17 +177,17 @@ def parseFile(datafile):
                     # Extract the blind post declarations
                     # need to save the antes, sitout (game 3064882390)
                     else:
-                        if (re.search("Posts small blind", line)): #  and len(splitline[0]) == 22
+                        if (re.search("Posts small blind", line)):
                             gameArray[8] = tempPlayerArray.index(splitline[0]) + 1
-                        elif (re.search("Posts big blind", line)): # and len(splitline[0]) == 22
-                            gameArray[9] = tempPlayerArray.index(splitline[0]) + 1  # the big blind is always last
+                        elif (re.search("Posts big blind", line)):
+                            gameArray[9] = tempPlayerArray.index(splitline[0]) + 1
 
                             # Since the players are all saved, update the gameArray's info
                             # Save the number of players
                             gameArray[6] = len(tempPlayerArray)
 
                             # Set the dealer player
-                            # sometimes the dealer is dead, how to fix?
+                            # If the dealer is dead, set the dealer index to 0
                             try:
                                 gameArray[7] = tempPlayerIndex.index(dealerSeat) + 1
                             except Exception:
@@ -223,15 +213,12 @@ def parseFile(datafile):
 
 
                 # If this is currently the summary, get the total pot, board results (if any),
-                # and the user results. Update the gamesList once the parsing is done
+                # and the user results. Update the gamesList once the parsing is done.
                 elif (currentSector == "summary"):
 
                     # Extract the total pot amount
                     if (re.search("Total Pot", line)):
                         line = line.split()
-
-                        # print(line)
-                        # print(linenumber)
 
                         if (re.search(":", line[1])):
                             line = line[1].replace("Pot($", "").replace(",", "").split(":")
@@ -248,27 +235,13 @@ def parseFile(datafile):
                         for x in range(1, len(line)):
                             gameArray[4].append(line[x].replace("[", "").replace("]", ""))
 
-                    # Else parse the user results in the summary
+                    # Else parse the user results in the summary (TODO)
                     elif (re.search("Seat", line)): 
-                        # search for the word "Seat", and keep a count of the number of seats, 
-                        # since there is no indication of when the game is over
-                        # seatCounter += 1
-                        # print("help")
-                        # print(gameArray[6])
-                        # print(seatCounter)
+
                         line = line.split()
 
                         # find out who won, who lost, who collected, and any other info that might be needed
-                        # print(str(seatCounter) + " " + str(gameArray[6]))
-                        # timesAlmostAppended += 1
 
-                        # print(gameArray)
-                        # if (seatCounter == int(gameArray[6])):
-                            # seatCounter = 0
-                            # timesAppended += 1
-                            # if error thrown, do not append. instead log the problem somewhere
-                            # print("appended")
-                            # gamesList.append(gameArray)
 
                     # If the line is blank and the array has not been updated yet, append it to the
                     # gamesList and change the arrayListUpdated flag
@@ -343,42 +316,3 @@ for x in range(0, len(newlist)):
 
 # when a dealer is dead, there is no dealer seat
 
-
-
-
-
-# somevalue = 2
-# print(" ")
-# # print(newlist[0])
-# # print(" ")
-# # print(newlist[1])
-# # print(" ")
-# print(newlist[somevalue][0:10])
-# print(" ")
-# print(newlist[somevalue][10])
-# print(" ")
-# print(newlist[somevalue][11])
-# print(" ")
-# print(newlist[somevalue][12])
-# print(" ")
-# print(newlist[somevalue][13])
-# print(" ")
-
-# print(newlist[somevalue][14])
-# print(" ")
-# # print(newlist[somevalue][14][2])
-# # print(newlist[somevalue][14][3])
-# # print(newlist[somevalue][14][4])
-# # print(newlist[somevalue][14][5])
-# # print(newlist[somevalue][14][6])
-
-# # print(" ")
-
-# print(newlist[somevalue][15])
-# print(" ")
-# print(newlist[somevalue][16])
-# print(" ")
-# # print(newlist[somevalue][16])
-# # print(" ")
-# # print(newlist[3])
-# print(" ")
