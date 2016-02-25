@@ -19,7 +19,9 @@ def writeCSV(gameArray):
 
 
     #### ---- ####
+    # This is the part to edit
     # Append the values to the array in the order that the row should look like
+
 
     csvrow.append(parserAPI.getGameID(gameArray))
 
