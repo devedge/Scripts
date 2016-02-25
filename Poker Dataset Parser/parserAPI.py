@@ -1,7 +1,8 @@
 
-import os
+# import os
+# import datafileParser
+# import csvGenerator
 
-# indices in the gameArray
 gameIDIndex = 0
 dateIndex = 1
 timeIndex = 2
@@ -16,6 +17,14 @@ gameWonIndex = 10
 gameLostIndex = 11
 firstUserIndex = 12
 
+
+# class parserAPI:
+# indices in the gameArray
+
+# def __init__():
+#     print("parserAPI init")
+
+
 # a dead dealer will have a value of 0
 # should initialize the gamearray here once, and provide a method to wipe it after use
 
@@ -24,21 +33,21 @@ firstUserIndex = 12
 #   call datafileParser.py to parse it
 #   get the games list array that is returned
 #   call the per-game loop method in csvGenerator.py
-def scanDirectory(path):
+# def scanDirectory(path):
 
-    # Scan every text file in the path and its subfolders
-    for (root, dirs, files) in os.walk(path):
-            for name in files:
-                if name.endswith((".txt")):
+#     # Scan every text file in the path and its subfolders
+#     for (root, dirs, files) in os.walk(path):
+#             for name in files:
+#                 if name.endswith((".txt")):
 
-                    # Parse the file to get the list of games
-                    gamesList = datafileParser.parseFile(os.path.join(root, name))
-                    arraySize = len(gamesList)
+#                     # Parse the file to get the list of games
+#                     gamesList = datafileParser.parseFile(os.path.join(root, name))
+#                     arraySize = len(gamesList)
 
-                    # For every game in the array, call the function that writes
-                    # the csv file
-                    for x in range(0, arraySize):
-                        csvGenerator.writeCSV(gamesList[x])
+#                     # For every game in the array, call the function that writes
+#                     # the csv file
+#                     for x in range(0, arraySize):
+#                         csvGenerator.writeCSV(gamesList[x])
 
 
 

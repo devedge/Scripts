@@ -13,9 +13,15 @@ currentSector = "init"
 dealerSeat = 0
 tempPlayerArray = []
 tempPlayerIndex = []
-gamesList = []
+# gamesList = []
 gameArray = []
 playerArrayInstance = []
+
+
+# class datafileParser:
+
+#     def __init__():
+#         print("datafileParser init")
 
 # Initializes a blank gameArray
 def initGameArray():
@@ -64,7 +70,7 @@ def initPlayerInstance():
 
 
 
-file = "/home/usr/dataset-50.txt"
+# file = "/home/usr/dataset-50.txt"
 
 
 def parseFile(datafile):
@@ -77,6 +83,7 @@ def parseFile(datafile):
     global currentSector
     global gamesList
 
+    gamesList = []
     initGameArray()
     initPlayerInstance()
 
@@ -301,12 +308,12 @@ def extractUserAction(line, sectorIDX):
 
 
 ####### Testing and debugging #######
-newlist = parseFile(file)
+# newlist = parseFile(file)
 
 # print(len(newlist))
 
-for x in range(0, len(newlist)):
-    print(gamesList[x])
+# for x in range(0, len(newlist)):
+#     print(gamesList[x])
 
 
 ## TODO ##
