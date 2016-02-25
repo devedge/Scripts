@@ -18,11 +18,6 @@ gameArray = []
 playerArrayInstance = []
 
 
-# class datafileParser:
-
-#     def __init__():
-#         print("datafileParser init")
-
 # Initializes a blank gameArray
 def initGameArray():
     global gameArray
@@ -69,10 +64,8 @@ def initPlayerInstance():
                             ]
 
 
-
-# file = "/home/usr/dataset-50.txt"
-
-
+# Parses a file with a list of poker games and returns a list of all of the games, 
+# represented as arrays
 def parseFile(datafile):
 
     global firstGame
@@ -87,10 +80,13 @@ def parseFile(datafile):
     initGameArray()
     initPlayerInstance()
 
+    lineNumber = 0 # for debugging purposes
+
     with open(datafile, 'r') as f:
 
         # Parse the file line by line
         for line in f:
+            lineNumber += 1
 
             # This is the first line of a game, so reset all of the per-game variables.
             # Then, extract the gameID, date, and time & timezone. 
@@ -152,12 +148,11 @@ def parseFile(datafile):
             # Depending on the current sector the loop is in, parse the user actions and 
             # populate the gameArray
             else:
-                # If this is the "init" sector, first grab the seat initializations, then
-                # grab the blind posts
-
-                # Check if the current line is empty
+                # Is the current line empty?
                 lineNotEmpty = bool(len(line.split()) != 0)
 
+                # If this is the "init" sector, first grab the seat initializations, then
+                # grab the blind posts.
                 # Get the information from the lines following the 'Stage' and 'Table' declarations
                 if ((currentSector == "init") and lineNotEmpty): 
                     splitline = line.split()
@@ -172,7 +167,13 @@ def parseFile(datafile):
 
                         # Set up temporary arrays that are used to find out what order players were declared
                         tempPlayerArray.append(splitline[3])
-                        tempPlayerIndex.append(int(splitline[1]))
+
+                        try:
+                            tempPlayerIndex.append(int(splitline[1]))
+                        except Exception as e:
+                            print(lineNumber)
+                            print(datafile)
+                            raise e
                         
                         # Get the declaration index of the user using the tempPlayerArray index
                         currentPlayer = tempPlayerArray.index(splitline[3]) + 1

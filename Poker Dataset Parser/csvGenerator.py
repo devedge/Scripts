@@ -1,17 +1,4 @@
- 
-# ask for a directory to scan (recursive?)
-
-# pass the directory to parserAPI.py
-
-# in parserAPI.py, after each file parsed, 
-#   call a method here for storing the array results in a csv file
-
-# the method here for creating the csv file can call helper methods
-#   from parserAPI.py to get relevant data
-
-
-# all that has to be changed here is how the data will explicitly be
-#   saved in the csv file
+#!/usr/bin/python
 
 import sys
 import csv
@@ -19,23 +6,13 @@ import os.path
 import parserAPI  
 import datafileParser
 
-# from parserAPI import *
-
-dirPath = ""
 csvName = ""
 csvFile = ""
-numiter = 0
 
-# per-game loop method (takes game array)
-#   for each game in the array
-#   either call the csv saver method in csvGenerator.py to save data row by row
-#   or keep a counter of stuff and write to the csv file after
 
+# Writes the csv file from information gathered from the gameArray
 def writeCSV(gameArray):
     global csvFile
-    global numiter
-
-    numiter += 1
 
     # array of values taken from parserAPI.py and using gameArray
     csvrow =  []
@@ -55,6 +32,59 @@ def writeCSV(gameArray):
 
 
 
+# The main method
+def main(argv):
+    
+    global csvName
+    global csvFile
+    overwrite = "n"
+    dirPath = ""
+
+    # Get the location of the dataset's directory, and the name of the csv file
+    if (len(sys.argv) == 1):
+        dirPath = input('Enter the absolute path the dataset folder: ')
+        csvName = input('Enter a name for the csv file: ')
+
+    elif (len(sys.argv) == 3):
+        dirPath = sys.argv[1]
+        csvName = sys.argv[2]
+
+    elif (len(sys.argv) == 4):
+        dirPath = sys.argv[1]
+        csvName = sys.argv[2]
+        overwrite = sys.argv[3]
+
+    elif (sys.argv[1].lower() == "help"):
+        print("Usage: ")
+        print("$ python csvGenerator.py")
+        print("or")
+        print("$ python csvGenerator.py /absolute/path/to/folder output.csv y")
+        print("where 'y' (yes) is optional, and overwrites the previous file")
+        exit(0)
+
+    else:
+        print("Usage: ")
+        print("$ python csvGenerator.py")
+        print("or")
+        print("$ python csvGenerator.py /absolute/path/to/folder output.csv y")
+        print("where 'y' (yes) is optional, and overwrites the previous file")
+        exit(0)
+
+
+    # check the file location of the csv file
+    checkFileLocation(overwrite)
+
+    # open the csv file
+    csvFile = csv.writer(open(csvName, "w"))
+
+    print("Working...")
+
+    # Call the method that scans the entire directory of data files
+    scanDirectory(dirPath)
+
+    print("Done")
+
+
 # Scan every text file in the path and its subfolders
 def scanDirectory(path):
     for (root, dirs, files) in os.walk(path):
@@ -70,41 +100,14 @@ def scanDirectory(path):
                         writeCSV(gamesList[x])
 
 
-# The starting point of the program
-def main():
-    
-    global dirPath
+# Check if the file exists, and overwrite it if the user wants to
+def checkFileLocation(overwrite):
     global csvName
-    global csvFile
 
-    # Get the path to the data folder and the name of the CSV file to write to
-    if (sys.version_info[0] >= 3):
-        dirPath = input('Enter the absolute path to the folder with the dataset: ')
-        csvName = input('Enter a name for the csv file that will be created: ')
-    else:
-        dirPath = eval(input('Enter the absolute path to the folder with the dataset: '))
-        csvName = eval(input('Enter a name for the csv file that will be created: '))
-
-    # check the file location of the csv file
-    # checkFileLocation(csvName)
-
-    # create the blank csv file
-
-    # open the csv file
-    # with open(csvName, 'w', newline='') as csvfile:
-    csvFile = csv.writer(open(csvName, "w"))
-
-    # call the parserAPI.py file that starts parsing
-    scanDirectory(dirPath) #parserAPI.
-
-    print(numiter)
+    if (os.path.exists(csvName) and (overwrite != "y")):
+        if (input("The file already exists. Overwrite it? (y/n): ") == "n"):
+            csvName = input("Enter a new filename: ")
 
 
-
-def checkFileLocation(csvName):
-    print("wat")
-
-
-
-
-main()
+# The program start point
+main(sys.argv[1:])
