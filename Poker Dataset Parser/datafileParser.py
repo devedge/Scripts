@@ -8,6 +8,7 @@ import re
 # their IDs and number are stored in two different arrays for temporary reference
 
 firstGame = True
+arrayListUpdated = False
 currentSector = "init"
 dealerSeat = 0
 tempPlayerArray = []
@@ -69,27 +70,34 @@ file = "/home/usr/dataset-50.txt"
 def parseFile(datafile):
 
     global firstGame
+    global arrayListUpdated
     global tempPlayerArray
     global tempPlayerIndex
     global dealerSeat
     global currentSector
+    global gamesList
 
     initGameArray()
     initPlayerInstance()
 
-    seatCounter = 0
+    # seatCounter = 0
 
     with open(datafile, 'r') as f:
 
-        linenumber = 0
+        # linenumber = 0
+        # numTimesStageSeen = 0
+        # timesAppended = 0
+        # timesAlmostAppended = 0
+        
 
         # Parse the file line by line
         for line in f:
 
-            linenumber += 1
+            # linenumber += 1
             # This is the first line of a game, so reset all of the per-game variables.
             # Then, extract the gameID, date, and time & timezone. 
             if (re.search("Stage", line)):
+                # numTimesStageSeen += 1
                
                 # reset all the per-game variables
                 tempPlayerArray = []
@@ -97,24 +105,29 @@ def parseFile(datafile):
                 initPlayerInstance()
                 initGameArray()
                 
+                arrayListUpdated = False
                 currentSector = "init"
                 dealerSeat = 0
 
+                # Begin to parse the first line
                 line = line.split()
+                dashIndex = line.index("-")
                 
                 gameArray[0] = int(line[1].replace("#", "").replace(":", ""))   # insert game ID
-                gameArray[1] = line[7]                                          # insert date
-                gameArray[2] = (line[8] + line[9])                              # insert time and timezone
+                gameArray[1] = line[dashIndex + 1]                              # insert date  (7)
+                gameArray[2] = (line[dashIndex + 2] + line[dashIndex + 3])      # insert time and timezone (8 & 9)
             
+
             # This is the second line of a new game, so extract and
             # save the dealer seat number from the line.
             elif (re.search("Table", line)):
                 line = line.split()
 
-                 # len(line) - 4 
-
+                 # Get the dealer seat number from the value that comes after the word "Seat"
                 dealerSeat = int(line[line.index("Seat") + 1].replace("#", "")) 
 
+
+            # Update the current sector the script is in as it progresses through the game
             elif (re.search("\*\*\* POCKET CARDS \*\*\*", line)):
                 currentSector = "pocketCards"
                 gameArray[3] += 1
@@ -138,34 +151,45 @@ def parseFile(datafile):
             elif (re.search("\*\*\* SUMMARY \*\*\*", line)):
                 currentSector = "summary"
 
+
             # Depending on the current sector the loop is in, parse the user actions and 
             # populate the gameArray
-            elif (len(line.split()) != 0):  # as long as the line is not empty
+            else:
                 # If this is the "init" sector, first grab the seat initializations, then
                 # grab the blind posts
-                if (currentSector == "init"):
+
+                # Check if the current line is empty
+                lineNotEmpty = bool(len(line.split()) != 0)
+
+                # Get the information from the lines following the 'Stage' and 'Table' declarations
+                if ((currentSector == "init") and lineNotEmpty): 
                     splitline = line.split()
 
                     # Extract the seat assignments, user IDs, and dollar amount in chips per
                     # user
                     if (re.search("Seat", line)):
+
                         # append an initialized playerArrayInstance to the gameArray
                         initPlayerInstance()
                         gameArray.append(playerArrayInstance)
 
+                        # Set up temporary arrays that are used to find out what order players were declared
                         tempPlayerArray.append(splitline[3])
                         tempPlayerIndex.append(int(splitline[1]))
+                        
+                        # Get the declaration index of the user using the tempPlayerArray index
+                        currentPlayer = tempPlayerArray.index(splitline[3]) + 1
 
                         # Save the user ID and dollar amount in chips
-                        currentPlayer = tempPlayerArray.index(splitline[3]) + 1
                         gameArray[11 + currentPlayer][0] = splitline[3]
                         gameArray[11 + currentPlayer][1] = float(splitline[4].replace("(", "").replace("$", "").replace(",", ""))
 
                     # Extract the blind post declarations
+                    # need to save the antes, sitout (game 3064882390)
                     else:
-                        if (re.search("small blind", line)):
+                        if (re.search("Posts small blind", line)): #  and len(splitline[0]) == 22
                             gameArray[8] = tempPlayerArray.index(splitline[0]) + 1
-                        else:
+                        elif (re.search("Posts big blind", line)): # and len(splitline[0]) == 22
                             gameArray[9] = tempPlayerArray.index(splitline[0]) + 1  # the big blind is always last
 
                             # Since the players are all saved, update the gameArray's info
@@ -173,57 +197,86 @@ def parseFile(datafile):
                             gameArray[6] = len(tempPlayerArray)
 
                             # Set the dealer player
-                            gameArray[7] = tempPlayerIndex.index(dealerSeat) + 1
+                            # sometimes the dealer is dead, how to fix?
+                            try:
+                                gameArray[7] = tempPlayerIndex.index(dealerSeat) + 1
+                            except Exception:
+                                gameArray[7] = 0
 
 
-                # Parse all of the actions taken during the Pocket Cards round
-                if (currentSector == "pocketCards"):
+                # Parse the user actions during the pocket cards, flop, turn, river, and showdown sections
+                elif ((currentSector == "pocketCards") and lineNotEmpty):
                     extractUserAction(line.split(), 2)
 
-                if (currentSector == "flop"):
+                elif ((currentSector == "flop") and lineNotEmpty):
                     extractUserAction(line.split(), 3)
 
-                if (currentSector == "turn"):
+                elif ((currentSector == "turn") and lineNotEmpty):
                     extractUserAction(line.split(), 4)
 
-                if (currentSector == "river"):
+                elif ((currentSector == "river") and lineNotEmpty):
                     extractUserAction(line.split(), 5)
 
-                if (currentSector == "showdown"):
+                elif ((currentSector == "showdown") and lineNotEmpty):
                     extractUserAction(line.split(), 6)
 
+
+
                 # If this is currently the summary, get the total pot, board results (if any),
-                # and the user results
-                if (currentSector == "summary"):
-                    # Extract the total pot amount from the line
+                # and the user results. Update the gamesList once the parsing is done
+                elif (currentSector == "summary"):
+
+                    # Extract the total pot amount
                     if (re.search("Total Pot", line)):
                         line = line.split()
 
-                        gameArray[5] = float(line[1].replace("Pot($", "").replace(")", "").replace(",", ""))
+                        # print(line)
+                        # print(linenumber)
 
-                    # Extract the board configuration from the line
+                        if (re.search(":", line[1])):
+                            line = line[1].replace("Pot($", "").replace(",", "").split(":")
+                            line = line[0]
+                        else:
+                            line = line[1].replace("Pot($", "").replace(")", "").replace(",", "")
+
+                        gameArray[5] = float(line)
+
+                    # Extract the board configuration from the line after the Total Pot amount
                     elif (re.search("Board", line)):
                         line = line.split()
 
                         for x in range(1, len(line)):
                             gameArray[4].append(line[x].replace("[", "").replace("]", ""))
 
-                    # Else parse the user results
+                    # Else parse the user results in the summary
                     elif (re.search("Seat", line)): 
                         # search for the word "Seat", and keep a count of the number of seats, 
                         # since there is no indication of when the game is over
-                        seatCounter += 1
+                        # seatCounter += 1
                         # print("help")
                         # print(gameArray[6])
                         # print(seatCounter)
                         line = line.split()
 
                         # find out who won, who lost, who collected, and any other info that might be needed
+                        # print(str(seatCounter) + " " + str(gameArray[6]))
+                        # timesAlmostAppended += 1
 
-                        if (seatCounter == gameArray[6]):
-                            seatCounter = 0
-                            gamesList.append(gameArray)
-    
+                        # print(gameArray)
+                        # if (seatCounter == int(gameArray[6])):
+                            # seatCounter = 0
+                            # timesAppended += 1
+                            # if error thrown, do not append. instead log the problem somewhere
+                            # print("appended")
+                            # gamesList.append(gameArray)
+
+                    # If the line is blank and the array has not been updated yet, append it to the
+                    # gamesList and change the arrayListUpdated flag
+                    elif(not arrayListUpdated):
+                        gamesList.append(gameArray)
+                        arrayListUpdated = True
+
+
     # once all of the games in a file have been parsed, return the list
     return gamesList
 
@@ -234,12 +287,8 @@ def extractUserAction(line, sectorIDX):
     action = line[2]
     actionEntry = []
 
-    if (action == "Bets"):
-        actionEntry.append("Bets")
-        actionEntry.append(float(line[3].replace("$", "").replace(",", "")))
-
-    elif (action == "Calls"):
-        actionEntry.append("Calls")
+    if ( (action == "Bets") or (action == "Calls") or (action == "All-In") ):
+        actionEntry.append(action)
         actionEntry.append(float(line[3].replace("$", "").replace(",", "")))
 
     elif (action == "Raises"):
@@ -264,11 +313,15 @@ def extractUserAction(line, sectorIDX):
     else:
         actionEntry.append(action) # check, fold, or muck
 
+    # Determine the player's absolute index in the gameArray using tempPlayerArray
     playerIDX = 11 + tempPlayerArray.index(line[0]) + 1
 
+    # If the player has not made a move during the current sector, replace the first value
+    # (which is blank) in the play actions array
     if(gameArray[playerIDX][sectorIDX][0][0] == "NA"):
         gameArray[playerIDX][sectorIDX][0] = actionEntry
-    else:                        
+    else:
+        # Otherwise, the player has made a move, so append the action
         gameArray[playerIDX][sectorIDX].append(actionEntry)
 
 
@@ -277,7 +330,22 @@ def extractUserAction(line, sectorIDX):
 ####### Testing and debugging #######
 newlist = parseFile(file)
 
-print(newlist[300])
+# print(len(newlist))
+
+for x in range(0, len(newlist)):
+    print(gamesList[x])
+
+
+## TODO ##
+
+# when there are Antes, they get announced before the small and big blind get posted.
+# need to check that
+
+# when a dealer is dead, there is no dealer seat
+
+
+
+
 
 # somevalue = 2
 # print(" ")
