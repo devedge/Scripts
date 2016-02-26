@@ -14,7 +14,7 @@ csvFile = ""
 def writeCSV(gameArray):
     global csvFile
 
-    # array of values taken from parserAPI.py and using gameArray
+    # array of values taken from parserAPI.py using the gameArray
     csvrow =  []
 
 
@@ -24,6 +24,11 @@ def writeCSV(gameArray):
 
 
     csvrow.append(parserAPI.getGameID(gameArray))
+    csvrow.append(parserAPI.getDate(gameArray))
+
+    # Get all the winners in a game
+    # if (parserAPI.isGameWon(gameArray)):
+    #     csvrow.append(parserAPI.getWinnerID(gameArray))
 
 
     #### ---- ####
@@ -75,6 +80,10 @@ def main(argv):
 
     # check the file location of the csv file
     checkFileLocation(overwrite)
+
+    # Remove the old error log 
+    if (os.path.exists("errorlog.txt")):
+        os.remove("errorlog.txt")
 
     # open the csv file
     csvFile = csv.writer(open(csvName, "w"))

@@ -18,12 +18,6 @@ gameLostIndex = 11
 firstUserIndex = 12
 
 
-# class parserAPI:
-# indices in the gameArray
-
-# def __init__():
-#     print("parserAPI init")
-
 
 # a dead dealer will have a value of 0
 # should initialize the gamearray here once, and provide a method to wipe it after use
@@ -44,7 +38,7 @@ def getTime(gameArray):
     return gameArray[timeIndex]
 
 # Returns a boolean
-def gameWon(gameArray):
+def isGameWon(gameArray):
     return bool(gameArray[10][0])
 
 # 
@@ -60,10 +54,16 @@ def getUserID(gameArray, numUser = 1):
 
 # instead of getting just a winner ID, what if we got the entire winner array?
 
+
+
+
 # Gets the winner of a game (should include a check that fails if the game wasn't won?)
 # Returns a string
 def getWinnerID(gameArray):
     return gameArray[12 + int(gameArray[12])][1]
+
+def getWinnerMoney(gameArray):
+    return gameArray[12]
 
 
 # method that checks if there are cards on the board
