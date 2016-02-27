@@ -7,6 +7,7 @@ import re
 # player numbers are assigned in the order they appear
 # their IDs and number are stored in two different arrays for temporary indexing reference
 
+
 firstGame = True
 arrayListUpdated = False
 currentSector = "init"
@@ -185,7 +186,7 @@ def parseFile(datafile):
                             tempPlayerIndex.append(int(splitline[1]))
                             
                             # Get the declaration index of the user using the tempPlayerArray index
-                            currentPlayer = tempPlayerArray.index(splitline[3]) + 1
+                            currentPlayer = getDeclarationIndex(splitline[3]) # tempPlayerArray.index(splitline[3]) + 1
 
                             # If the user ID is not the standard length of 22, fail
                             if (len(splitline[3]) != 22):
@@ -197,36 +198,48 @@ def parseFile(datafile):
                                 gameArray[11 + currentPlayer][1] = float(splitline[4].replace("(", "").replace("$", "").replace(",", ""))
 
 
-                        # Extract the blind post declarations
-                        # need to save the antes, sitout (game 3064882390)
+                        # Extract the blind post declarations, antes posted, dealer seat 
+                        # getting shifted, or a player sitting out
+                        elif (re.search("Posts small blind", line)):
+                            gameArray[8] = getDeclarationIndex(splitline[0]) # tempPlayerArray.index(splitline[0]) + 1
+
+                        elif (re.search("Posts big blind", line)):
+                            gameArray[9] = getDeclarationIndex(splitline[0]) # tempPlayerArray.index(splitline[0]) + 1
+
+                        elif (re.search("- Ante", line)): # ante
+                            print("ANTE TODO")
+
+                        elif (re.search("button moves to Seat", line)):
+                            # The dealer seat shifts
+                            dealerSeat = int(splitline[4])
+
+                        elif (re.search("- sitout", line)): # sitout
+
+                            print("yolo")
+
                         else:
+                            # Since the players are all saved, update the gameArray's info
+                            # Save the number of players
+                            gameArray[6] = len(tempPlayerArray)
 
-                            # write another elif to catch "button moves to Seat x"
+                            # Set the dealer player
+                            # If the dealer is dead, set the dealer index to 0
+                            try:
+                                gameArray[7] = tempPlayerIndex.index(dealerSeat) + 1
+                            except Exception:
+                                gameArray[7] = 0
 
-                            if (re.search("Posts small blind", line)):
-                                gameArray[8] = tempPlayerArray.index(splitline[0]) + 1
-                            elif (re.search("Posts big blind", line)):
-                                try:
-                                    # find the player in the player array
-                                    gameArray[9] = tempPlayerArray.index(splitline[0]) + 1
-                                except Exception:
-                                    # If the player was not declared but shows up mid-game, declare it invalid
-                                    # (as in the file "abs NLH handhq_61-OBFUSCATED.txt", line 6655)
-                                    skipGame = True
-                                    failInfo.append(["ERROR: Player not declared but shows up mid-game", ("file: " + datafile), ("line: " + str(lineNumber))])
+                            # elif (re.search("Posts big blind", line)):
+                            #     try:
+                            #         # find the player in the player array
+                            #         gameArray[9] = tempPlayerArray.index(splitline[0]) + 1
+                            #     except Exception:
+                            #         # If the player was not declared but shows up mid-game, declare it invalid
+                            #         # (as in the file "abs NLH handhq_61-OBFUSCATED.txt", line 6655)
+                            #         skipGame = True
+                            #         failInfo.append(["ERROR: Player not declared but shows up mid-game", ("file: " + datafile), ("line: " + str(lineNumber))])
 
-                                # Since the players are all saved, update the gameArray's info
-                                # Save the number of players
-                                gameArray[6] = len(tempPlayerArray)
-
-                                # Set the dealer player
-                                # If the dealer is dead, set the dealer index to 0
-                                try:
-                                    gameArray[7] = tempPlayerIndex.index(dealerSeat) + 1
-                                except Exception:
-                                    gameArray[7] = 0
-                                    # failInfo.append(["INFO: Dead dealer", ("file: " + datafile), ("line: " + str(lineNumber))])
-
+                            #         # failInfo.append(["INFO: Dead dealer", ("file: " + datafile), ("line: " + str(lineNumber))])
 
                     # Parse the user actions during the pocket cards, flop, turn, river, and showdown sections
                     elif ((currentSector == "pocketCards") and lineNotEmpty):
@@ -359,6 +372,24 @@ def extractUserAction(line, sectorIDX):
         # (as in file "abs NLH handhq_61-OBFUSCATED.txt", at line 6662)
         skipGame = True
         failInfo.append(["ERROR: adding user action to gameArray", ("file: " + filename), ("line: " + str(lineNumber)), e])
+
+
+
+
+def getDeclarationIndex(value):
+
+    global tempPlayerArray
+    global lineNumber
+    global filename
+    global skipGame
+
+    try:
+        return int(tempPlayerArray.index(value) + 1)
+    except Exception:
+        skipGame = True
+        failInfo.append(["ERROR: Player not declared but shows up mid-game", ("file: " + filename), ("line: " + str(lineNumber))])
+        return 0
+        
 
 
 ## TODO ##
