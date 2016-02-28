@@ -45,3 +45,5 @@ This script is dedicated to providing readable methods to extract values from th
 <h6>`datafileParser.py`</h6><br>
 ...
 
+[An example gameArray]()
+
