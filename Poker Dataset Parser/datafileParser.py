@@ -444,7 +444,7 @@ def extractUserAction(line, sectorIDX):
 # number IDs that are not consecutive. Therefore, the script gives the players an 
 # index value as they appear, and resolves the discrepancies by using the
 # tempPlayerArray and tempPlayerIndex arrays. This method retrives the players'
-# actual index (how they show up) from their unsername using an index lookup in the tempPlayerArray
+# actual index (how they show up) from their username using an index lookup in the tempPlayerArray
 def getDeclarationIndex(value):
 
     global tempPlayerArray

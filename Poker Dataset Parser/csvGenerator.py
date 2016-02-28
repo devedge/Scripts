@@ -14,6 +14,9 @@ csvFile = ""
 def writeCSV(gameArray):
     global csvFile
 
+    # Initialize the gameArray in parserAPI
+    parserAPI.initGameArray(gameArray)
+
     # array of values taken from parserAPI.py using the gameArray
     csvrow =  []
 

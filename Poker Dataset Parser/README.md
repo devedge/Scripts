@@ -5,13 +5,20 @@ Python parser script for a poker dataset taken from [here](https://web.archive.o
 ***
 
 
-To use, [download the ZIP file](https://github.com/devedge/Scripts/raw/master/Poker%20Dataset%20Parser/PokerDatasetParser.zip), extract it, and in the directory, run: `python csvGenerator.py` from the command line. (Note: this has only been tested with Python 3.5)
+To run, [download the ZIP file](https://github.com/devedge/Scripts/raw/master/Poker%20Dataset%20Parser/PokerDatasetParser.zip), extract it, and in the directory, run: `python csvGenerator.py` from the command line. (Note: this has only been tested with Python 3.5)
 <br><br>
 
 Advanced: <br> 
 Run with `python csvGenerator.py /absolute/path/to/dataset/folder output.csv y` <br><br>
 The second argument (/absolute/path/to/dataset/folder) is the absolute path to the dataset folder. All of the files in the folder must be the raw text files (eg., uncompress them before running the parser) <br><br>
 The third argument is the CSV output file that will be generated. The fourth (and optional) argument (y), which means 'yes', is to overwrite the specified CSV file if it already exists.<br><br>
+
+
+## Setup
+
+The structure of the CSV rows needs to manually defined, as needed, in the first method (writeCSV()) in csvGenerator.py. <br>
+For each row that you want to have in the CSV file, you need to `csvrow.append()` the value from the gameArray that you want, using the API methods from parserAPI.py (eg., `parserAPI.getGameID()` returns the game ID, so appending it looks like this: `csvrow.append(parserAPI.getGameID())` ) <br>
+A list of all of the possible game methods you can extract will be provided below, under `parserAPI.py`
 
 
 ## Program Logic
