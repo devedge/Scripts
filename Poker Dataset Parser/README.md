@@ -5,7 +5,7 @@ Python parser script for a poker dataset taken from [here](https://web.archive.o
 ***
 
 
-To run, [download the ZIP file](https://github.com/devedge/Scripts/raw/master/Poker%20Dataset%20Parser/PokerDatasetParser.zip), extract it, and in the directory, run: `python csvGenerator.py` from the command line. (Note: this has only been tested with Python 3.5)
+To run, [download the ZIP file](https://github.com/devedge/Scripts/raw/master/Poker%20Dataset%20Parser/data/PokerDatasetParser.zip), extract it, and in the directory, run: `python csvGenerator.py` from the command line. (Note: this has only been tested with Python 3.5)
 <br><br>
 
 <b>Advanced:</b> <br> 
@@ -45,5 +45,5 @@ This script is dedicated to providing readable methods to extract values from th
 <h6>`datafileParser.py`</h6><br>
 ...
 
-[An example gameArray]()
+[An example gameArray](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/data/example%20gameArray.txt)
 

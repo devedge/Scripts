@@ -17,7 +17,7 @@
         [172.0], 
         [
             [['5s', 'Ac']], 
-            [[' B:Ah', 'B:Ad', 'P:Ac', 'B:7d', 'B:6s\n']], 
+            [[' B:Ah', 'B:Ad', 'P:Ac', 'B:7d', 'B:6s']], 
             ['Three of a kind, aces']
         ]
     ], 
