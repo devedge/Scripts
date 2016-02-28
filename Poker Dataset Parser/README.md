@@ -11,7 +11,7 @@ To use, [download the ZIP file](https://github.com/devedge/Scripts/raw/master/Po
 Advanced: <br> 
 Run with `python csvGenerator.py /absolute/path/to/dataset/folder output.csv y` <br><br>
 The second argument (/absolute/path/to/dataset/folder) is the absolute path to the dataset folder. All of the files in the folder must be the raw text files (eg., uncompress them before running the parser) <br><br>
-The third argument is the CSV output file that will be generated. The fourth (and optional) argument (y), which means 'yes', is to overwrite the CSV file specified if it already exists.<br><br>
+The third argument is the CSV output file that will be generated. The fourth (and optional) argument (y), which means 'yes', is to overwrite the specified CSV file if it already exists.<br><br>
 
 
 ## Program Logic

@@ -23,6 +23,39 @@ failInfo = []
 lineNumber = 0
 filename = ""
 
+
+# Array indices, declared globally
+gameIDIndex = 0
+dateIndex = 1
+timeIndex = 2
+numRoundsIndex = 3
+boardCardsIndex = 4
+totalPotIndex = 5
+numPlayersIndex = 6
+dealerIndex = 7
+smallBlindIndex = 8
+bigBlindIndex = 9
+gameWonIndex = 10
+gameLostIndex = 11
+firstUserIndex = 12
+
+userIDIndex = 0
+userChipsAmount = 1
+userPreGameIndex = 2
+userPocketCardsIndex = 3
+userFlopIndex = 4
+userTurnIndex = 5
+userRiverIndex = 6
+userShowdownIndex = 7
+
+# userPocketCardsIndex = 2
+# userFlopIndex = 3
+# userTurnIndex = 4
+# userRiverIndex = 5
+# userShowdownIndex = 6
+
+
+
 # Initializes a blank gameArray
 def initGameArray():
     global gameArray
@@ -61,7 +94,8 @@ def initPlayerInstance():
     playerArrayInstance =   [
                                 "NULL",     # player ID
                                 0.0,        # dollars in chips
-                                [["NA"]],   # user actions during the Pocket Cards
+                                [["NA"]],   # user actions before the game starts (usually empty, other than small/big blind, antes, or sitout)
+                                [["NA"]],   # user actions during the pocket cards
                                 [["NA"]],   # user actions during the flop
                                 [["NA"]],   # user actions during the turn
                                 [["NA"]],   # user actions during the river
@@ -123,9 +157,9 @@ def parseFile(datafile):
                     line = line.split()
                     dashIndex = line.index("-")
                     
-                    gameArray[0] = int(line[1].replace("#", "").replace(":", ""))   # insert game ID
-                    gameArray[1] = line[dashIndex + 1]                              # insert date  (7)
-                    gameArray[2] = (line[dashIndex + 2] + line[dashIndex + 3])      # insert time and timezone (8 & 9)
+                    gameArray[gameIDIndex] = int(line[1].replace("#", "").replace(":", ""))   # insert game ID
+                    gameArray[dateIndex] = line[dashIndex + 1]                              # insert date  (7)
+                    gameArray[timeIndex] = (line[dashIndex + 2] + line[dashIndex + 3])      # insert time and timezone (8 & 9)
                 
 
                 # This is the second line of a new game, so extract and
@@ -140,23 +174,23 @@ def parseFile(datafile):
                 # Update the current sector the script is in as it progresses through the game
                 elif (re.search("\*\*\* POCKET CARDS \*\*\*", line) and not skipGame):
                     currentSector = "pocketCards"
-                    gameArray[3] += 1
+                    gameArray[numRoundsIndex] += 1
                 
                 elif (re.search("\*\*\* FLOP \*\*\*", line) and not skipGame):
                     currentSector = "flop"
-                    gameArray[3] += 1
+                    gameArray[numRoundsIndex] += 1
                 
                 elif (re.search("\*\*\* TURN \*\*\*", line) and not skipGame):
                     currentSector = "turn"
-                    gameArray[3] += 1
+                    gameArray[numRoundsIndex] += 1
 
                 elif (re.search("\*\*\* RIVER \*\*\*", line) and not skipGame):
                     currentSector = "river"
-                    gameArray[3] += 1
+                    gameArray[numRoundsIndex] += 1
 
                 elif (re.search("\*\*\* SHOW DOWN \*\*\*", line) and not skipGame):
                     currentSector = "showdown"
-                    gameArray[3] += 1
+                    gameArray[numRoundsIndex] += 1
 
                 elif (re.search("\*\*\* SUMMARY \*\*\*", line) and not skipGame):
                     currentSector = "summary"
@@ -195,17 +229,17 @@ def parseFile(datafile):
                                 failInfo.append(["ERROR: User ID is nonstandard length", ("file: " + datafile), ("line: " + str(lineNumber)), ("ID: " + splitline[3])])
                             else:
                                 # Save the user ID and dollar amount in chips
-                                gameArray[11 + currentPlayer][0] = splitline[3]
-                                gameArray[11 + currentPlayer][1] = float(splitline[4].replace("(", "").replace("$", "").replace(",", ""))
+                                gameArray[firstUserIndex + currentPlayer - 1][0] = splitline[3]
+                                gameArray[firstUserIndex + currentPlayer - 1][1] = float(splitline[4].replace("(", "").replace("$", "").replace(",", ""))
 
 
                         # Extract the blind post declarations, antes posted, dealer seat 
                         # getting shifted, or a player sitting out
                         elif (re.search("Posts small blind", line)):
-                            gameArray[8] = getDeclarationIndex(splitline[0]) # tempPlayerArray.index(splitline[0]) + 1
+                            gameArray[smallBlindIndex] = getDeclarationIndex(splitline[0]) # tempPlayerArray.index(splitline[0]) + 1
 
                         elif (re.search("Posts big blind", line)):
-                            gameArray[9] = getDeclarationIndex(splitline[0]) # tempPlayerArray.index(splitline[0]) + 1
+                            gameArray[bigBlindIndex] = getDeclarationIndex(splitline[0]) # tempPlayerArray.index(splitline[0]) + 1
 
                         elif (re.search("- Ante", line)): # ante
                             print("ANTE TODO")
@@ -221,42 +255,31 @@ def parseFile(datafile):
                         else:
                             # Since the players are all saved, update the gameArray's info
                             # Save the number of players
-                            gameArray[6] = len(tempPlayerArray)
+                            gameArray[numPlayersIndex] = len(tempPlayerArray)
 
                             # Set the dealer player
                             # If the dealer is dead, set the dealer index to 0
                             try:
-                                gameArray[7] = tempPlayerIndex.index(dealerSeat) + 1
+                                gameArray[dealerIndex] = tempPlayerIndex.index(dealerSeat) + 1
                             except Exception:
-                                gameArray[7] = 0
+                                gameArray[dealerIndex] = 0
 
-                            # elif (re.search("Posts big blind", line)):
-                            #     try:
-                            #         # find the player in the player array
-                            #         gameArray[9] = tempPlayerArray.index(splitline[0]) + 1
-                            #     except Exception:
-                            #         # If the player was not declared but shows up mid-game, declare it invalid
-                            #         # (as in the file "abs NLH handhq_61-OBFUSCATED.txt", line 6655)
-                            #         skipGame = True
-                            #         failInfo.append(["ERROR: Player not declared but shows up mid-game", ("file: " + datafile), ("line: " + str(lineNumber))])
-
-                            #         # failInfo.append(["INFO: Dead dealer", ("file: " + datafile), ("line: " + str(lineNumber))])
 
                     # Parse the user actions during the pocket cards, flop, turn, river, and showdown sections
                     elif ((currentSector == "pocketCards") and lineNotEmpty):
-                        extractUserAction(line.split(), 2)
+                        extractUserAction(line.split(), userPocketCardsIndex)
 
                     elif ((currentSector == "flop") and lineNotEmpty):
-                        extractUserAction(line.split(), 3)
+                        extractUserAction(line.split(), userFlopIndex)
 
                     elif ((currentSector == "turn") and lineNotEmpty):
-                        extractUserAction(line.split(), 4)
+                        extractUserAction(line.split(), userTurnIndex)
 
                     elif ((currentSector == "river") and lineNotEmpty):
-                        extractUserAction(line.split(), 5)
+                        extractUserAction(line.split(), userRiverIndex)
 
                     elif ((currentSector == "showdown") and lineNotEmpty):
-                        extractUserAction(line.split(), 6)
+                        extractUserAction(line.split(), userShowdownIndex)
 
 
 
@@ -274,14 +297,14 @@ def parseFile(datafile):
                             else:
                                 line = line[1].replace("Pot($", "").replace(")", "").replace(",", "")
 
-                            gameArray[5] = float(line)
+                            gameArray[totalPotIndex] = float(line)
 
                         # Extract the board configuration from the line after the Total Pot amount
                         elif (re.search("Board", line)):
                             line = line.split()
 
                             for x in range(1, len(line)):
-                                gameArray[4].append(line[x].replace("[", "").replace("]", ""))
+                                gameArray[boardCardsIndex].append(line[x].replace("[", "").replace("]", ""))
 
                         # Else parse the user results in the summary (TODO)
                         elif (re.search("Seat", line)): 
@@ -315,12 +338,15 @@ def parseFile(datafile):
 
 
     # Log any known errors encountered
-    if (len(failInfo) != 0):
+    if ((len(failInfo) != 0) or (gamesList == "NULL")):
 
         with open("errorlog.txt", 'a') as f:
 
             for x in range(0, len(failInfo)):
                 f.write(str(failInfo[x]) + "\n")
+
+            if (gamesList == "NULL"):
+                f.write("FILE ABORTED: " + filename)
 
             f.write("\n")
 
@@ -367,7 +393,7 @@ def extractUserAction(line, sectorIDX):
 
     try:
         # Determine the player's absolute index in the gameArray using tempPlayerArray
-        playerIDX = 11 + tempPlayerArray.index(line[0]) + 1
+        playerIDX = firstUserIndex + tempPlayerArray.index(line[0])
     
         # If the player has not made a move during the current sector, replace the first value
         # (which is blank) in the play actions array
