@@ -16,9 +16,8 @@ The third argument is the CSV output file that will be generated. The fourth (an
 
 ## Setup
 
-The structure of the CSV rows needs to manually defined, as needed, in the first method (writeCSV()) in csvGenerator.py. <br>
-For each row that you want to have in the CSV file, you need to `csvrow.append()` the value from the gameArray that you want, using the API methods from parserAPI.py (eg., `parserAPI.getGameID()` returns the game ID, so appending it looks like this: `csvrow.append(parserAPI.getGameID())` ) <br><br>
-A list of all of the possible game methods you can extract will be provided below, under `parserAPI.py` <br><br>
+The structure of the CSV rows needs to be manually defined, as needed, in csvGenerator.py. <br>
+More information is provided under the 'csvGenerator.py` section below. <br><br>
 
 
 ## Program Logic
@@ -27,10 +26,19 @@ There are three python scripts that take care of the three major tasks involved:
 
 <br><br>
 `csvGenerator.py` <br>
-...
+
+The only part of the script that needs to be edited is `writeCSV()`, between the comment headers `#### ---- ####` <br><br>
+
+For each row that you want to have in the CSV file, use `csvrow.append()` to add the value from the gameArray that you want. These values are extraced using the API methods from parserAPI.py. All of the possible methods you can use to extract game values are provided below under `parserAPI.py` <br>
+For example, to get the game ID of each game, you would use `parserAPI.getGameID()`. Appending it as a row in the CSV file would look like: `csvrow.append(parserAPI.getGameID())` <br>
+After all of the values have been appended, use `csvFile.writerow(csvrow)` to write the row to the file.
+
+<br><br>
+The 'csvGenerator.py' script is in charge of getting user input, scanning every directory and subdirectory, passing each file to the datafileParser.py script, and writing the values to a CSV file.
 
 <br><br>
 `parserAPI.py` <br>
+This script is dedicated to providing readable methods to extract values from the gameArray that `datafileParser.py` returns.
 ...
 
 <br><br>

@@ -25,20 +25,40 @@ def writeCSV(gameArray):
     # This is the part to edit
     # Append the values to the array in the order that the row should look like
 
+    if (parserAPI.isGameLost()):
+        csvrow.append(parserAPI.getGameID())
+        csvrow.append(parserAPI.getDate())
+        csvFile.writerow(csvrow)
+        
 
-    csvrow.append(parserAPI.getGameID())
-    csvrow.append(parserAPI.getDate())
+    
 
-    # Get all the winners in a game
-    # if (parserAPI.isGameWon(gameArray)):
-    #     csvrow.append(parserAPI.getWinnerID(gameArray))
+    # EXAMPLES
+    # Uncomment to use
+
+    # For all the games that are won, store the game ID, the user ID, 
+    #       the amount won, the cards they played, the cards on the table,
+    #       and the 'action, value' for each move they made during the game.
+
+    # There can be multiple winners in a game. However, there is never more than
+    # one loser or one player who collects the pot. 
+
+    # Some games have winners and losers, other games have only winners or 
+    # only losers, and some games have a player who collects the pot
+
+    # if (parserAPI.isGameWon()):
+    #       if multiple winners
+    #     csvrow.append(parserAPI.getGameID())
+    #     csvrow.append(parserAPI.getWinnerID())
 
 
     #### ---- ####
 
 
     # Write the row to the csv file
-    csvFile.writerow(csvrow)
+    # if (len(csvrow) != 0):
+    #     csvFile.writerow(csvrow)
+    
 
 
 

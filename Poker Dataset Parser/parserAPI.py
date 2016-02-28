@@ -46,6 +46,10 @@ def getTime():
 def isGameWon():
     return bool(gameArray[10][0])
 
+
+def isGameLost():
+    return bool(gameArray[gameLostIndex][0])
+
 # 
 def isDealerDead():
     return bool(int(gameArray[dealerIndex]) == 0)

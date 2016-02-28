@@ -26,6 +26,7 @@ filename = ""
 
 
 # Array indices, declared globally
+# Main gameArray indices
 gameIDIndex = 0
 dateIndex = 1
 timeIndex = 2
@@ -40,6 +41,24 @@ gameWonIndex = 10
 gameLostIndex = 11
 firstUserIndex = 12
 
+# Winner/collected indices
+winnerPresentIndex = 0
+collectorPresentIndex = 1
+numWinnersIndex = 2
+idxWinnersIndex = 3
+moneyRecievedIndex = 4
+
+# Loser indices
+loserPresentIndex = 0
+indexOfLoserIndex = 1
+losingHandIndex = 2
+
+# Cards played indices
+lHCardsPlayedIndex = 0
+lHCardsTableIndex = 1
+lHCardDescriptIndex = 2
+
+# User indices
 userIDIndex = 0
 userChipsAmount = 1
 userPreGameIndex = 2
@@ -71,14 +90,21 @@ def initGameArray():
                         False,      #  only collected
                         0,          #  number of winners
                         [],         #  index of winners
-                        [],         #  money received
-                        ""          #  winning hand (the full string?)
+                        [],         #  money received (for each winner, can be appended)
+                        [           #  winning/collected hand
+                            ["NA"],  # cards played (usually two)
+                            ["NA"],  # cards on table (usually five)
+                            ""       # card description
+                        ]  
                     ],
                     [
                         False,      #  is there a loser      # 11  lost info
-                        0,          #  number of losers
-                        [],         #  index of losers
-                        ""          #  losing hand (the full string?)
+                        0,          #  index of loser
+                        [           #  losing hand
+                            ["NA"],  # cards played (usually two)
+                            ["NA"],  # cards on table (usually five)
+                            ""       # card description
+                        ]          
                     ]
                 ]
 
@@ -216,7 +242,7 @@ def parseFile(datafile):
                             tempPlayerIndex.append(int(splitline[1]))
                             
                             # Get the declaration index of the user using the tempPlayerArray index
-                            currentPlayer = getDeclarationIndex(splitline[3]) # tempPlayerArray.index(splitline[3]) + 1 #
+                            currentPlayer = getDeclarationIndex(splitline[3])
 
                             # If the user ID is not the standard length of 22, fail
                             if (len(splitline[3]) != 22):
@@ -281,7 +307,6 @@ def parseFile(datafile):
                     # If this is currently the summary, get the total pot, board results (if any),
                     # and the user results. Update the gamesList once the parsing is done.
                     elif (currentSector == "summary"):
-                        splitline = line.split()
 
                         # Extract the total pot amount
                         if (re.search("Total Pot", line)):
@@ -304,15 +329,38 @@ def parseFile(datafile):
 
                         # Else parse the user results in the summary (TODO)
                         elif (re.search("Seat", line)): 
+                            # splitline = line.split()
 
                             if (re.search("collected", line)):
-                                print("collected")
+                                # Split before the amount collected
+                                splitline = line.split("Total")
+
+                                gameArray[gameLostIndex][collectorPresentIndex] = True
+                                # get index of collector, and get the collecter amount
+
+                                if (re.search("HI:", line)):
+                                    if (re.search("Does", line)):
+                                        print("collecter did not show")
+                                    else:
+                                        print("collecter showed")
+
 
                             elif (re.search("won", line)):
                                 print("game won")
 
                             elif (re.search("lost", line)):
-                                print("loser")
+                                # Split at the point before the cards list and the name of the hand
+                                splitline = line.split("[")
+
+                                gameArray[gameLostIndex][loserPresentIndex] = True
+                                gameArray[gameLostIndex][indexOfLoserIndex] = getDeclarationIndex(line.split()[2])
+
+                                # Save the hand description
+                                gameArray[gameLostIndex][losingHandIndex][lHCardDescriptIndex] = splitline[0].split("with")[1].strip()
+
+                                # Save the cards played and the full hand
+                                gameArray[gameLostIndex][losingHandIndex][lHCardsPlayedIndex] = splitline[1].split("-")[0].split()
+                                gameArray[gameLostIndex][losingHandIndex][lHCardsTableIndex] = splitline[1].split("-")[1].replace("]", "").split(",")
 
 
                         # If the line is blank and the array has not been updated yet, append it to the
