@@ -25,7 +25,7 @@ More information is provided under the `csvGenerator.py` section below. <br><br>
 There are three python scripts that take care of the three major tasks involved: a parser (datafileParser.py), an interface for the user to interact with (csvGenerator.py), and an API that simplifies getting data from the parser (parserAPI.py)
 
 <br>
-<h1>`csvGenerator.py`</h1> <br>
+<h6>`csvGenerator.py`</h6> <br>
 
 The only part of the script that needs to be edited is `writeCSV()`, between the comment headers `#### ---- ####` <br><br>
 
@@ -37,11 +37,11 @@ After all of the values have been appended, use `csvFile.writerow(csvrow)` to wr
 The 'csvGenerator.py' script is in charge of getting user input, scanning every directory and subdirectory, passing each file to the datafileParser.py script, and writing the values to a CSV file.
 
 <br><br>
-<h1>`parserAPI.py`</h1> <br>
+<h6>`parserAPI.py`</h6> <br>
 This script is dedicated to providing readable methods to extract values from the gameArray that `datafileParser.py` returns.
 ...
 
 <br><br>
-<h1>`datafileParser.py`</h1> <br>
+<h6>`datafileParser.py`</h6> <br>
 ...
 
