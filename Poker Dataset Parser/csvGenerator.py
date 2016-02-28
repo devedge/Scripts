@@ -25,10 +25,6 @@ def writeCSV(gameArray):
     # This is the part to edit
     # Append the values to the array in the order that the row should look like
 
-    if (parserAPI.isGameLost()):
-        csvrow.append(parserAPI.getGameID())
-        csvrow.append(parserAPI.getDate())
-        csvFile.writerow(csvrow)
         
 
     
@@ -47,17 +43,30 @@ def writeCSV(gameArray):
     # only losers, and some games have a player who collects the pot
 
     # if (parserAPI.isGameWon()):
-    #       if multiple winners
+    #       # if multiple winners
     #     csvrow.append(parserAPI.getGameID())
     #     csvrow.append(parserAPI.getWinnerID())
 
+    #     csvFile.writerow(csvrow)
+
+
+
+
+    # For every game that is lost, store the user ID, the cards they played, and
+    #       the cards on the table
+
+    if (parserAPI.isGameLost()):
+        csvrow.append(parserAPI.getGameID())
+        csvrow.append(parserAPI.getDate())
+        csvFile.writerow(csvrow)
+
+
+
+
+    # For each game, store the game ID, date, if the game was won, what the total pot was
+
 
     #### ---- ####
-
-
-    # Write the row to the csv file
-    # if (len(csvrow) != 0):
-    #     csvFile.writerow(csvrow)
     
 
 

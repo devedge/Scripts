@@ -19,38 +19,35 @@ firstUserIndex = 12
 
 gameArray = []
 
-# a dead dealer will have a value of 0
-# should initialize the gamearray here once, and provide a method to wipe it after use
-
+# The gameArray is initialized here to simplify extracting values
 def initGameArray(gameArrayInput):
     global gameArray
+
+    gameArray = []
     gameArray = gameArrayInput
 
 
-# get id
 # Returns an int
 def getGameID():
     return int(gameArray[gameIDIndex])
 
-# get date
 # Returns a string
 def getDate():
     return gameArray[dateIndex]
 
-# get time
 # Returns a string
 def getTime():
     return gameArray[timeIndex]
 
 # Returns a boolean
 def isGameWon():
-    return bool(gameArray[10][0])
+    return bool(gameArray[gameWonIndex][0])
 
-
+# Returns a boolean
 def isGameLost():
     return bool(gameArray[gameLostIndex][0])
 
-# 
+# Returns a boolean true if the dealer is dead
 def isDealerDead():
     return bool(int(gameArray[dealerIndex]) == 0)
 

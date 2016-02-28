@@ -8,7 +8,7 @@ Python parser script for a poker dataset taken from [here](https://web.archive.o
 To run, [download the ZIP file](https://github.com/devedge/Scripts/raw/master/Poker%20Dataset%20Parser/PokerDatasetParser.zip), extract it, and in the directory, run: `python csvGenerator.py` from the command line. (Note: this has only been tested with Python 3.5)
 <br><br>
 
-Advanced: <br> 
+<b>Advanced:</b> <br> 
 Run with `python csvGenerator.py /absolute/path/to/dataset/folder output.csv y` <br><br>
 The second argument (/absolute/path/to/dataset/folder) is the absolute path to the dataset folder. All of the files in the folder must be the raw text files (eg., uncompress them before running the parser) <br><br>
 The third argument is the CSV output file that will be generated. The fourth (and optional) argument (y), which means 'yes', is to overwrite the specified CSV file if it already exists.<br><br>
@@ -28,8 +28,9 @@ There are three python scripts that take care of the three major tasks involved:
 <h6>`csvGenerator.py`</h6><br>
 The only part of the script that needs to be edited is `writeCSV()`, between the comment headers `#### ---- ####`. Examples are provided in the file. <br><br>
 
-For each row that you want to have in the CSV file, use `csvrow.append()` to add the value from the gameArray that you want. These values are extraced using the API methods from parserAPI.py. All of the possible methods you can use to extract game values are provided below under `parserAPI.py` <br><br>
-For example, to get the game ID of each game, you would use `parserAPI.getGameID()`. Appending it as a row in the CSV file would look like: `csvrow.append(parserAPI.getGameID())` <br>
+For each row that you want to have in the CSV file, use `csvrow.append()` to add the value from the gameArray. These values are extracted using the API methods from parserAPI.py. All of the possible methods you can use are provided below under the `parserAPI.py` section.<br><br>
+For example, to get the game ID of each game, you would use `parserAPI.getGameID()`. <br>
+Appending it as a row in the CSV file would look like: `csvrow.append(parserAPI.getGameID())` <br>
 After all of the values have been appended, use `csvFile.writerow(csvrow)` to write the row to the file.
 
 <br>
