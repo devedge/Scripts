@@ -9,6 +9,7 @@ import traceback
 # their IDs and number are stored in two different arrays for temporary indexing reference
 
 
+# General global variables
 firstGame = True
 arrayListUpdated = False
 currentSector = "init"
@@ -47,12 +48,6 @@ userFlopIndex = 4
 userTurnIndex = 5
 userRiverIndex = 6
 userShowdownIndex = 7
-
-# userPocketCardsIndex = 2
-# userFlopIndex = 3
-# userTurnIndex = 4
-# userRiverIndex = 5
-# userShowdownIndex = 6
 
 
 
@@ -226,7 +221,7 @@ def parseFile(datafile):
                             # If the user ID is not the standard length of 22, fail
                             if (len(splitline[3]) != 22):
                                 skipGame = True
-                                failInfo.append(["ERROR: User ID is nonstandard length", ("file: " + datafile), ("line: " + str(lineNumber)), ("ID: " + splitline[3])])
+                                failInfo.append(["ERROR: User ID is nonstandard length", ("file: " + datafile), ("Game ID: " + str(gameArray[gameIDIndex])), ("line: " + str(lineNumber)), ("ID: " + splitline[3])])
                             else:
                                 # Save the user ID and dollar amount in chips
                                 gameArray[firstUserIndex + currentPlayer - 1][0] = splitline[3]
@@ -236,21 +231,21 @@ def parseFile(datafile):
                         # Extract the blind post declarations, antes posted, dealer seat 
                         # getting shifted, or a player sitting out
                         elif (re.search("Posts small blind", line)):
-                            gameArray[smallBlindIndex] = getDeclarationIndex(splitline[0]) # tempPlayerArray.index(splitline[0]) + 1
+                            gameArray[smallBlindIndex] = getDeclarationIndex(splitline[0])
+                            extractUserAction(splitline, userPreGameIndex)
 
                         elif (re.search("Posts big blind", line)):
-                            gameArray[bigBlindIndex] = getDeclarationIndex(splitline[0]) # tempPlayerArray.index(splitline[0]) + 1
+                            gameArray[bigBlindIndex] = getDeclarationIndex(splitline[0])
+                            extractUserAction(splitline, userPreGameIndex)
 
                         elif (re.search("- Ante", line)): # ante
-                            print("ANTE TODO")
+                            extractUserAction(splitline, userPreGameIndex)
 
                         elif (re.search("button moves to Seat", line)):
-                            # The dealer seat shifts
-                            dealerSeat = int(splitline[4])
+                            dealerSeat = int(splitline[4])  # The dealer seat shifts
 
                         elif (re.search("- sitout", line)): # sitout
-
-                            print("yolo")
+                            extractUserAction(splitline, userPreGameIndex)
 
                         else:
                             # Since the players are all saved, update the gameArray's info
@@ -286,6 +281,7 @@ def parseFile(datafile):
                     # If this is currently the summary, get the total pot, board results (if any),
                     # and the user results. Update the gamesList once the parsing is done.
                     elif (currentSector == "summary"):
+                        splitline = line.split()
 
                         # Extract the total pot amount
                         if (re.search("Total Pot", line)):
@@ -309,9 +305,14 @@ def parseFile(datafile):
                         # Else parse the user results in the summary (TODO)
                         elif (re.search("Seat", line)): 
 
-                            line = line.split()
+                            if (re.search("collected", line)):
+                                print("collected")
 
-                            # find out who won, who lost, who collected, and any other info that might be needed
+                            elif (re.search("won", line)):
+                                print("game won")
+
+                            elif (re.search("lost", line)):
+                                print("loser")
 
 
                         # If the line is blank and the array has not been updated yet, append it to the
@@ -355,7 +356,9 @@ def parseFile(datafile):
     return gamesList
 
 
-# Parse a user's action from a line and save the results in the gameArray
+
+
+# Parse a user's action from a line and save the results in the user's array in the gameArray
 def extractUserAction(line, sectorIDX):
     global skipGame
     global failInfo
@@ -385,11 +388,35 @@ def extractUserAction(line, sectorIDX):
         actionEntry.append("Collects")
         actionEntry.append(float(line[2].replace("$", "").replace(",", "")))
 
+    elif (action == "Posts"):
+
+        # If the user posts a small blind
+        if (line[3] == "small"):
+            actionEntry.append("Posts small blind")
+            actionEntry.append(float(line[5].replace("$", "").replace(",", "")))
+
+        # If the user posts a big blind
+        elif (line[3] == "big"):
+            actionEntry.append("Posts big blind")
+            actionEntry.append(float(line[5].replace("$", "").replace(",", "")))
+
     elif (action == "Does"):
         actionEntry.append("Does not show")
 
+    elif (action == "Ante"):
+
+        # if an ante is returned
+        if (line[3] == "returned"):
+            actionEntry.append("Ante returned")
+            actionEntry.append(float(line[4].replace("$", "").replace(",", "")))
+
+        # if an ante is posted
+        else:
+            actionEntry.append("Ante")
+            actionEntry.append(float(line[3].replace("$", "").replace(",", "")))
+
     else:
-        actionEntry.append(action) # check, fold, or muck
+        actionEntry.append(action) # check, fold, muck, or sitout
 
     try:
         # Determine the player's absolute index in the gameArray using tempPlayerArray
@@ -407,7 +434,9 @@ def extractUserAction(line, sectorIDX):
         # The user is not declared before an action
         # (as in file "abs NLH handhq_61-OBFUSCATED.txt", at line 6662)
         skipGame = True
-        failInfo.append(["ERROR: Exception while adding user action to gameArray", ("file: " + filename), ("line: " + str(lineNumber)), e])
+        failInfo.append(["ERROR: Exception while adding user action to gameArray", ("file: " + filename), ("Game ID: " + str(gameArray[gameIDIndex])), ("line: " + str(lineNumber)), e])
+
+
 
 
 
@@ -427,5 +456,5 @@ def getDeclarationIndex(value):
         return int(tempPlayerArray.index(value) + 1)
     except Exception as e:
         skipGame = True
-        failInfo.append(["ERROR: Player not declared but shows up mid-game", ("file: " + filename), ("line: " + str(lineNumber)), e])
+        failInfo.append(["ERROR: Player not declared but shows up mid-game", ("file: " + filename), ("Game ID: " + str(gameArray[gameIDIndex])), ("line: " + str(lineNumber)), e])
         return 0

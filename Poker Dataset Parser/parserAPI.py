@@ -56,6 +56,9 @@ def getUserID(gameArray, numUser = 1):
 
 
 
+# get number of user actions per round (returns an int)
+
+
 
 # Gets the winner of a game (should include a check that fails if the game wasn't won?)
 # Returns a string

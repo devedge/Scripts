@@ -23,9 +23,10 @@ There are three python scripts that take care of the three major tasks involved:
 ...
 
 <br><br>
-`datafileParser.py` <br>
+`parserAPI.py` <br>
 ...
 
 <br><br>
-`parserAPI.py` <br>
+`datafileParser.py` <br>
 ...
+
