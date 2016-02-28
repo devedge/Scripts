@@ -17,8 +17,8 @@ The third argument is the CSV output file that will be generated. The fourth (an
 ## Setup
 
 The structure of the CSV rows needs to manually defined, as needed, in the first method (writeCSV()) in csvGenerator.py. <br>
-For each row that you want to have in the CSV file, you need to `csvrow.append()` the value from the gameArray that you want, using the API methods from parserAPI.py (eg., `parserAPI.getGameID()` returns the game ID, so appending it looks like this: `csvrow.append(parserAPI.getGameID())` ) <br>
-A list of all of the possible game methods you can extract will be provided below, under `parserAPI.py`
+For each row that you want to have in the CSV file, you need to `csvrow.append()` the value from the gameArray that you want, using the API methods from parserAPI.py (eg., `parserAPI.getGameID()` returns the game ID, so appending it looks like this: `csvrow.append(parserAPI.getGameID())` ) <br><br>
+A list of all of the possible game methods you can extract will be provided below, under `parserAPI.py` <br><br>
 
 
 ## Program Logic
