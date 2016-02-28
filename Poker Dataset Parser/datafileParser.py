@@ -1,4 +1,5 @@
 import re
+import traceback
 
 # the data file is parsed line by line
 # as each line is being processed, variables keep track of where in the file the 
@@ -186,7 +187,7 @@ def parseFile(datafile):
                             tempPlayerIndex.append(int(splitline[1]))
                             
                             # Get the declaration index of the user using the tempPlayerArray index
-                            currentPlayer = getDeclarationIndex(splitline[3]) # tempPlayerArray.index(splitline[3]) + 1
+                            currentPlayer = getDeclarationIndex(splitline[3]) # tempPlayerArray.index(splitline[3]) + 1 #
 
                             # If the user ID is not the standard length of 22, fail
                             if (len(splitline[3]) != 22):
@@ -298,16 +299,25 @@ def parseFile(datafile):
 
 
         # If any error happens, print the filename, line number, and line, then throw an exception
-        except Exception as e:
+        except Exception:
+            print("ERROR")
             print("In file:     " + datafile)
             print("Line number: " + str(lineNumber))
             print("Line:        " + line)
-            raise e
+            traceback.print_exc()
+
+            print(" ")
+            if(input("Continue parsing (and ignore this file)? [y/n]: ").lower() == "n"):
+                exit(0)
+            else:
+                gamesList ="NULL"
+            print(" ")
 
 
     # Log any known errors encountered
-    with open("errorlog.txt", 'a') as f:
-        if (len(failInfo) != 0):
+    if (len(failInfo) != 0):
+
+        with open("errorlog.txt", 'a') as f:
 
             for x in range(0, len(failInfo)):
                 f.write(str(failInfo[x]) + "\n")
@@ -371,11 +381,15 @@ def extractUserAction(line, sectorIDX):
         # The user is not declared before an action
         # (as in file "abs NLH handhq_61-OBFUSCATED.txt", at line 6662)
         skipGame = True
-        failInfo.append(["ERROR: adding user action to gameArray", ("file: " + filename), ("line: " + str(lineNumber)), e])
+        failInfo.append(["ERROR: Exception while adding user action to gameArray", ("file: " + filename), ("line: " + str(lineNumber)), e])
 
 
 
-
+# In the dataset files, the users are not declared in order and they are given 
+# number IDs that are not consecutive. Therefore, the script gives the players an 
+# index value as they appear, and resolves the discrepancies by using the
+# tempPlayerArray and tempPlayerIndex arrays. This method retrives the players'
+# actual index (how they show up) from their unsername using an index lookup in the tempPlayerArray
 def getDeclarationIndex(value):
 
     global tempPlayerArray
@@ -385,17 +399,7 @@ def getDeclarationIndex(value):
 
     try:
         return int(tempPlayerArray.index(value) + 1)
-    except Exception:
+    except Exception as e:
         skipGame = True
-        failInfo.append(["ERROR: Player not declared but shows up mid-game", ("file: " + filename), ("line: " + str(lineNumber))])
+        failInfo.append(["ERROR: Player not declared but shows up mid-game", ("file: " + filename), ("line: " + str(lineNumber)), e])
         return 0
-        
-
-
-## TODO ##
-
-# when there are Antes, they get announced before the small and big blind get posted.
-# need to check that
-
-# when a dealer is dead, there is no dealer seat
-

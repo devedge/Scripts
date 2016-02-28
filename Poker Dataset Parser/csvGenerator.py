@@ -65,16 +65,16 @@ def main(argv):
         print("Usage: ")
         print("$ python csvGenerator.py")
         print("or")
-        print("$ python csvGenerator.py /absolute/path/to/folder output.csv y")
-        print("where 'y' (yes) is optional, and overwrites the previous file")
+        print("$ python csvGenerator.py /absolute/path/to/dataset/folder output.csv y")
+        print("where 'y' (yes) is optional, and overwrites the previous CSV file")
         exit(0)
 
     else:
         print("Usage: ")
         print("$ python csvGenerator.py")
         print("or")
-        print("$ python csvGenerator.py /absolute/path/to/folder output.csv y")
-        print("where 'y' (yes) is optional, and overwrites the previous file")
+        print("$ python csvGenerator.py /absolute/path/to/dataset/folder output.csv y")
+        print("where 'y' (yes) is optional, and overwrites the previous CSV file")
         exit(0)
 
 
@@ -105,17 +105,20 @@ def scanDirectory(path):
                     # Parse the file to get the list of games
                     gamesList = datafileParser.parseFile(os.path.join(root, name))
 
-                    # For every game in the array, call the function that writes
-                    # the csv file
-                    for x in range(0, len(gamesList)):
-                        writeCSV(gamesList[x])
+                    # If the user decides to continue the script after an exception has occurred,
+                    # don't save any games from the file where the error happened
+                    if (gamesList != "NULL"):
+                        # For every game in the array, call the function that writes
+                        # the csv file
+                        for x in range(0, len(gamesList)):
+                            writeCSV(gamesList[x])
 
 
 # Check if the file exists, and overwrite it if the user wants to
 def checkFileLocation(overwrite):
     global csvName
 
-    if (os.path.exists(csvName) and (overwrite != "y")):
+    if (os.path.exists(csvName) and (overwrite.lower() != "y")):
         if (input("The file already exists. Overwrite it? (y/n): ") == "n"):
             csvName = input("Enter a new filename: ")
 
