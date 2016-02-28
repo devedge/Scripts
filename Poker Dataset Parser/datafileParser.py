@@ -93,9 +93,9 @@ def initGameArray():
                         [],         #  index of winners
                         [],         #  money received (for each winner, can be appended)
                         [           #  winning/collected hand
-                            ["NA"],  # cards played (usually two)
-                            ["NA"],  # cards on table (usually five)
-                            ""       # card description
+                            [],  # cards played (usually two)
+                            [],  # cards on table (usually five)
+                            []       # card description
                         ]  
                     ],
                     [
@@ -342,12 +342,12 @@ def parseFile(datafile):
                                 # If the collector shows their hand 
                                 if (re.search("HI:", line)):
                                     if (re.search("Does not show", line)):
-                                        gameArray[gameWonIndex][winningHandIndex][cardHandDescriptIndex] = "Does not show"
+                                        gameArray[gameWonIndex][winningHandIndex][cardHandDescriptIndex].append("Does not show")
                                     else:
                                         splitline = line.split("[")
 
                                         # Save the hand description
-                                        gameArray[gameWonIndex][winningHandIndex][cardHandDescriptIndex] = splitline[0].split("with")[1].strip()
+                                        gameArray[gameWonIndex][winningHandIndex][cardHandDescriptIndex].append(splitline[0].split("with")[1].strip().replace("\n", ""))
 
                                         # Save the cards played and the full hand
                                         gameArray[gameWonIndex][winningHandIndex][cardHandPlayedIndex] = splitline[1].split("-")[0].split()
@@ -355,9 +355,21 @@ def parseFile(datafile):
 
 
                             elif (re.search("won", line)):
-                                # check if there is already a winner
-                                # if there is, append the values and update the gameArray
-                                print("game won")
+                                # If there are multiple winners, they will be appended to the winner index
+                                gameArray[gameWonIndex][winnerPresentIndex] = True
+                                gameArray[gameWonIndex][numWinnersIndex] = int(gameArray[gameWonIndex][numWinnersIndex]) + 1
+
+                                # get the index of the winner and the money received
+                                gameArray[gameWonIndex][idxWinnersIndex].append(getDeclarationIndex(line.split()[2]))
+                                gameArray[gameWonIndex][moneyRecievedIndex].append(float(line.split("Total")[1].split()[0].replace("(", "").replace(")", "").replace("$", "").replace(",", "")))
+
+                                # split between 'with' and '[' to get the hand description
+                                gameArray[gameWonIndex][winningHandIndex][cardHandDescriptIndex].append(line.split("[")[0].split("with")[1].strip().replace("\n", ""))
+
+                                # use the third split to grab the hand played and the cards on the table
+                                gameArray[gameWonIndex][winningHandIndex][cardHandPlayedIndex].append(line.split("[")[1].split("-")[0].split())
+                                gameArray[gameWonIndex][winningHandIndex][cardHandTableIndex].append(line.split("[")[1].split("-")[1].replace("]", "").split(","))
+
 
                             elif (re.search("lost", line)):
                                 # Split at the point before the cards list and the name of the hand
@@ -367,7 +379,7 @@ def parseFile(datafile):
                                 gameArray[gameLostIndex][indexOfLoserIndex] = getDeclarationIndex(line.split()[2])
 
                                 # Save the hand description
-                                gameArray[gameLostIndex][losingHandIndex][cardHandDescriptIndex] = splitline[0].split("with")[1].strip()
+                                gameArray[gameLostIndex][losingHandIndex][cardHandDescriptIndex] = splitline[0].split("with")[1].strip().replace("\n", "")
 
                                 # Save the cards played and the full hand
                                 gameArray[gameLostIndex][losingHandIndex][cardHandPlayedIndex] = splitline[1].split("-")[0].split()

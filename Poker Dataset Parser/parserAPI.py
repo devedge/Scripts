@@ -68,8 +68,8 @@ def getUserID(numUser = 1):
 
 # Gets the winner of a game (should include a check that fails if the game wasn't won?)
 # Returns a string
-def getWinnerID():
-    return gameArray[12 + int(gameArray[12])][1]
+# def getWinnerID():
+#     return gameArray[12 + int(gameArray[12])][1]
 
 def getWinnerMoney():
     return gameArray[12]

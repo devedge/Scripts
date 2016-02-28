@@ -42,12 +42,15 @@ def writeCSV(gameArray):
     # Some games have winners and losers, other games have only winners or 
     # only losers, and some games have a player who collects the pot
 
-    # if (parserAPI.isGameWon()):
-    #       # if multiple winners
-    #     csvrow.append(parserAPI.getGameID())
-    #     csvrow.append(parserAPI.getWinnerID())
+    if (parserAPI.isGameWon()):
+        # print(" ")
+        # print(gameArray)
+        # print(" ")
+          # if multiple winners
+        csvrow.append(parserAPI.getGameID())
+        # csvrow.append(parserAPI.getWinnerID())
 
-    #     csvFile.writerow(csvrow)
+        csvFile.writerow(csvrow)
 
 
 
@@ -55,10 +58,10 @@ def writeCSV(gameArray):
     # For every game that is lost, store the user ID, the cards they played, and
     #       the cards on the table
 
-    if (parserAPI.isGameLost()):
-        csvrow.append(parserAPI.getGameID())
-        csvrow.append(parserAPI.getDate())
-        csvFile.writerow(csvrow)
+    # if (parserAPI.isGameLost()):
+    #     csvrow.append(parserAPI.getGameID())
+    #     csvrow.append(parserAPI.getDate())
+    #     csvFile.writerow(csvrow)
 
 
 
