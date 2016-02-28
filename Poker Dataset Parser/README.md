@@ -43,7 +43,5 @@ This script is dedicated to providing readable methods to extract values from th
 
 <br><br>
 <h6>`datafileParser.py`</h6><br>
-...
-
-[An example gameArray](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/data/example%20gameArray.txt)
+This script parses a poker game text file. It saves each game in the file as a gameArray, and saves all of the games in one long gamesList, which is returned. [An example gameArray](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/data/example%20gameArray.txt)
 
