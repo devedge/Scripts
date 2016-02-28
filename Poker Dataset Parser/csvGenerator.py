@@ -26,8 +26,8 @@ def writeCSV(gameArray):
     # Append the values to the array in the order that the row should look like
 
 
-    csvrow.append(parserAPI.getGameID(gameArray))
-    csvrow.append(parserAPI.getDate(gameArray))
+    csvrow.append(parserAPI.getGameID())
+    csvrow.append(parserAPI.getDate())
 
     # Get all the winners in a game
     # if (parserAPI.isGameWon(gameArray)):
