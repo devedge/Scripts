@@ -66,8 +66,14 @@ def writeCSV(gameArray):
     #       the cards on the table
 
     # if (parserAPI.isGameLost()):
-    #     csvrow.append(parserAPI.getGameID())
-    #     csvrow.append(parserAPI.getDate())
+    #     csvrow.append(parserAPI.getPlayerID(parserAPI.getLosingPlayerIndex()))
+    #     csvrow.append(parserAPI.getLosingHand(1))
+    #     csvrow.append(parserAPI.getLosingHand(2))
+    #     csvrow.append(parserAPI.getLosingCardsOnTable(1))
+    #     csvrow.append(parserAPI.getLosingCardsOnTable(2))
+    #     csvrow.append(parserAPI.getLosingCardsOnTable(3))
+    #     csvrow.append(parserAPI.getLosingCardsOnTable(4))
+    #     csvrow.append(parserAPI.getLosingCardsOnTable(5))
     #     csvFile.writerow(csvrow)
 
 
