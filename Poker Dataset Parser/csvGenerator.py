@@ -9,7 +9,6 @@ import datafileParser
 csvName = ""
 csvFile = ""
 
-
 # Writes the csv file from information gathered from the gameArray
 def writeCSV(gameArray):
     global csvFile
@@ -21,35 +20,43 @@ def writeCSV(gameArray):
     csvrow =  []
 
 
-    #### ---- ####
-    # This is the part to edit
-    # Append the values to the array in the order that the row should look like
+    #### ---- ####  Edit this part so the values are appended to the array as a row
 
-        
 
-    
+
+
+
+
+
 
     # EXAMPLES
     # Uncomment to use
 
     # For all the games that are won, store the game ID, the user ID, 
-    #       the amount won, the cards they played, the cards on the table,
-    #       and the 'action, value' for each move they made during the game.
-
+    #       the amount won, and the cards on the table.
     # There can be multiple winners in a game. However, there is never more than
     # one loser or one player who collects the pot. 
-
     # Some games have winners and losers, other games have only winners or 
     # only losers, and some games have a player who collects the pot
 
     if (parserAPI.isGameWon()):
-        # print(" ")
-        # print(gameArray)
-        # print(" ")
-          # if multiple winners
         csvrow.append(parserAPI.getGameID())
-        # csvrow.append(parserAPI.getWinnerID())
 
+        # get just the first winner for simplicity, since there can be two.
+        # If we wanted both, we can use a for loop to iterate over both
+        csvrow.append(parserAPI.getPlayerID(parserAPI.getWinningPlayerIndex())) 
+        
+        # Get the amount won
+        csvrow.append(parserAPI.getWinningPlayerAmount())
+        
+        # gets the cards that were on the table for the first player
+        csvrow.append(parserAPI.getWinningCardsOnTable(1))
+        csvrow.append(parserAPI.getWinningCardsOnTable(2))
+        csvrow.append(parserAPI.getWinningCardsOnTable(3))
+        csvrow.append(parserAPI.getWinningCardsOnTable(4))
+        csvrow.append(parserAPI.getWinningCardsOnTable(5))
+
+        # Write the row
         csvFile.writerow(csvrow)
 
 
@@ -64,9 +71,11 @@ def writeCSV(gameArray):
     #     csvFile.writerow(csvrow)
 
 
-
-
     # For each game, store the game ID, date, if the game was won, what the total pot was
+    # csvrow.append(parserAPI.getGameID())
+    # csvrow.append(parserAPI.getDate())
+    # csvrow.append(parserAPI.isGameWon())
+    # csvrow.append(parserAPI.getTotalPot())
 
 
     #### ---- ####

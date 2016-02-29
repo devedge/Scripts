@@ -16,7 +16,7 @@ The third argument is the CSV output file that will be generated. The fourth (an
 
 ## Setup
 
-The structure of the CSV rows needs to be manually defined, as needed, in csvGenerator.py. <br>
+The structure of the CSV rows needs to be manually defined, as needed, in csvGenerator.py. No other editing needs to be done on the other files.<br>
 More information is provided under the `csvGenerator.py` section below. <br><br>
 
 
@@ -39,7 +39,8 @@ The 'csvGenerator.py' script is in charge of getting user input, scanning every 
 <br><br>
 <h5>`parserAPI.py`</h5><br>
 This script is dedicated to providing readable methods to extract values from the gameArray that `datafileParser.py` returns.
-...
+<br>
+Currently, all of the methods and their descriptions are in the parserAPI file. They will be added here soon.
 
 <br><br>
 <h5>`datafileParser.py`</h5><br>
