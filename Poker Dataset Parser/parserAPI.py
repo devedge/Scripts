@@ -130,7 +130,7 @@ def getOnePlayerAction(playerIndex = 1, play = 1, action = 1):
 
 # A user can take multiple actions during a play, so this returns the number 
 # of actions he has taken
-def getNumActionsInPlay(playerIndex = 1, play = 1):
+def getNumActions(playerIndex = 1, play = 1):
 
     if (gameArray[firstUserIndex - 1 + playerIndex][userPreGameIndex + play - 1][0][0] == "NA"):
         return 0
@@ -142,11 +142,48 @@ def getNumActionsInPlay(playerIndex = 1, play = 1):
 def getAllPlayerActions(playerIndex = 1, play = 1):
     array = []
 
-    for x in range(0, getNumActionsInPlay(playerIndex, play)):
+    for x in range(0, getNumActions(playerIndex, play)):
         array.append(gameArray[firstUserIndex - 1 + playerIndex][userPreGameIndex + play - 1][x][0])
     
     return array
 
+
+
+# Get a count of the actions of a player over the course of a game
+def getUserActionCount(playerIndex = 1):
+
+    # The values are: [calls, bets, raises, all-in, shows, check, fold, muck, sitout]
+    actionCount = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+    # for every play
+    for x in range(0,6):
+        
+        # for every action (usually 1, but occasionally 2)
+        for y in range(0, getNumActions(playerIndex, (x + 1))):
+
+            action = getOnePlayerAction(playerIndex, (x + 1), (y + 1) )
+
+            if (action.lower() == "calls"):
+                actionCount[0] += 1
+            elif (action.lower() == "bets"):
+                actionCount[1] += 1
+            elif (action.lower() == "raises"):
+                actionCount[2] += 1
+            elif ((action.lower() == "all-in") or (action.lower() == "all-in(raise)")): # or all-in (raises)
+                actionCount[3] += 1
+            elif (action.lower() == "shows"):
+                actionCount[4] += 1
+            elif (action.lower() == "checks"):
+                actionCount[5] += 1
+            elif (action.lower() == "folds"):
+                actionCount[6] += 1
+            elif (action.lower() == "mucks"):
+                actionCount[7] += 1
+            elif (action.lower() == "sitout"):
+                actionCount[8] += 1
+
+
+    return actionCount
 
 
 

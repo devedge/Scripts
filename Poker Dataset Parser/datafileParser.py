@@ -258,8 +258,9 @@ def parseFile(datafile):
 
                         else:
                             # Since the players are all saved, update the gameArray's info
-                            
+
                             # Save the number of players if it has not been set yet (ugly code here)
+                            # maybe do this in the next sector?
                             if (gameArray[numPlayersIndex] != len(tempPlayerArray)):
                                 gameArray[numPlayersIndex] = len(tempPlayerArray)
 

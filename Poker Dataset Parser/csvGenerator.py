@@ -29,6 +29,50 @@ def writeCSV(gameArray):
         csvrow.append(parserAPI.getGameID())
         csvrow.append(parserAPI.getNumberPlayers())
 
+        wpidx = parserAPI.getWinningPlayerIndex()
+
+        # append the action count of the winner
+        winnerActionArray = parserAPI.getUserActionCount(wpidx)
+        csvrow.append(winnerActionArray[0])
+        csvrow.append(winnerActionArray[1])
+        csvrow.append(winnerActionArray[2])
+        csvrow.append(winnerActionArray[3])
+        csvrow.append(winnerActionArray[4])
+        csvrow.append(winnerActionArray[5])
+        csvrow.append(winnerActionArray[6])
+        csvrow.append(winnerActionArray[7])
+        csvrow.append(winnerActionArray[8])
+
+        otherActionArray = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+        # append the action count of all the other players summed up
+        for x in range(0, parserAPI.getNumberPlayers()):
+            
+            # For all the players who are not winners
+            if ((x + 1) != wpidx):
+
+                tempuserarray = parserAPI.getUserActionCount(x + 1)
+
+                otherActionArray[0] += tempuserarray[0]
+                otherActionArray[1] += tempuserarray[1]
+                otherActionArray[2] += tempuserarray[2]
+                otherActionArray[3] += tempuserarray[3]
+                otherActionArray[4] += tempuserarray[4]
+                otherActionArray[5] += tempuserarray[5]
+                otherActionArray[6] += tempuserarray[6]
+                otherActionArray[7] += tempuserarray[7]
+                otherActionArray[8] += tempuserarray[8]
+
+
+        csvrow.append(otherActionArray[0])
+        csvrow.append(otherActionArray[1])
+        csvrow.append(otherActionArray[2])
+        csvrow.append(otherActionArray[3])
+        csvrow.append(otherActionArray[4])
+        csvrow.append(otherActionArray[5])
+        csvrow.append(otherActionArray[6])
+        csvrow.append(otherActionArray[7])
+        csvrow.append(otherActionArray[8])
 
 
         csvFile.writerow(csvrow)
