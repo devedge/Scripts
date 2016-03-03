@@ -1,8 +1,9 @@
-10/
-problematic/
-subset/
 __pycache__/
-out.csv
-output.csv
-output.txt
+dataset/
+program\ output/
+test\ subset/
+compressToZIP.sh
+datasetRunnerScript.sh
 errorlog.txt
+LocalReadmeNotes.txt
+testsetRunnerScript.sh

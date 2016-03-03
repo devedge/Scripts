@@ -255,29 +255,34 @@ def parseFile(datafile):
                                 gameArray[firstUserIndex + currentPlayer - 1][1] = float(splitline[4].replace("(", "").replace("$", "").replace(",", ""))
 
 
-                        # Extract the blind post declarations, antes posted, dealer seat 
-                        # getting shifted, or a player sitting out
-                        elif (re.search("Posts small blind", line)):
-                            gameArray[smallBlindIndex] = getDeclarationIndex(splitline[0])
-                            extractUserAction(splitline, userPreGameIndex)
-
-                        elif (re.search("Posts big blind", line)):
-                            gameArray[bigBlindIndex] = getDeclarationIndex(splitline[0])
-                            extractUserAction(splitline, userPreGameIndex)
-
-                        elif (re.search("- Ante", line)): # ante
-                            extractUserAction(splitline, userPreGameIndex)
-
-                        elif (re.search("button moves to Seat", line)):
-                            dealerSeat = int(splitline[4])  # The dealer seat shifts
-
-                        elif (re.search("- sitout", line)): # sitout
-                            extractUserAction(splitline, userPreGameIndex)
 
                         else:
                             # Since the players are all saved, update the gameArray's info
-                            # Save the number of players
-                            gameArray[numPlayersIndex] = len(tempPlayerArray)
+                            
+                            # Save the number of players if it has not been set yet (ugly code here)
+                            if (gameArray[numPlayersIndex] != len(tempPlayerArray)):
+                                gameArray[numPlayersIndex] = len(tempPlayerArray)
+
+
+                            # Extract the blind post declarations, antes posted, dealer seat 
+                            # getting shifted, or a player sitting out
+                            if (re.search("Posts small blind", line)):
+                                gameArray[smallBlindIndex] = getDeclarationIndex(splitline[0])
+                                extractUserAction(splitline, userPreGameIndex)
+
+                            elif (re.search("Posts big blind", line)):
+                                gameArray[bigBlindIndex] = getDeclarationIndex(splitline[0])
+                                extractUserAction(splitline, userPreGameIndex)
+
+                            elif (re.search("- Ante", line)): # ante
+                                extractUserAction(splitline, userPreGameIndex)
+
+                            elif (re.search("button moves to Seat", line)):
+                                dealerSeat = int(splitline[4])  # The dealer seat shifts
+
+                            elif (re.search("- sitout", line)): # sitout
+                                extractUserAction(splitline, userPreGameIndex)
+
 
                             # Set the dealer player
                             # If the dealer is dead, set the dealer index to 0

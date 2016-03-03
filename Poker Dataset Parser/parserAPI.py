@@ -92,6 +92,11 @@ def isBoardCardsDisplayed():
 def getBoardCards():
     return gameArray[boardCardsIndex]
 
+def getNumberRounds():
+    return gameArray[numRoundsIndex]
+
+
+
 
 
 
@@ -99,7 +104,7 @@ def getBoardCards():
 
 # Gets the number of players in the current game (int)
 def getNumberPlayers():
-    return int(gameArray[numPlayersIndex])
+    return gameArray[numPlayersIndex]
 
 # Get the player ID (string)
 def getPlayerID(playerIndex = 1):
@@ -117,8 +122,9 @@ def getPlayerChipsAmount(playerIndex = 1):
 #   1   Pre-game actions
 #   2   Pocket Cards
 #   3   Flop
-#   4   River
-#   5   Showdown
+#   4   Turn
+#   5   River
+#   6   Showdown
 def getOnePlayerAction(playerIndex = 1, play = 1, action = 1):
     return gameArray[firstUserIndex - 1 + playerIndex][userPreGameIndex + play - 1][action - 1][0]
 

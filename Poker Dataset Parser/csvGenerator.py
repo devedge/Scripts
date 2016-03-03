@@ -22,9 +22,34 @@ def writeCSV(gameArray):
 
     #### ---- ####  Edit this part so the values are appended to the array as a row
 
+    # For all the games that were won
+    if (parserAPI.isGameWon()):
+
+        # Game ID and number players
+        csvrow.append(parserAPI.getGameID())
+        csvrow.append(parserAPI.getNumberPlayers())
 
 
 
+        csvFile.writerow(csvrow)
+
+
+        # winningPlayerIDx = parserAPI.getWinningPlayerIndex()
+        # csvrow.append(parserAPI.getGameID())
+        # csvrow.append(parserAPI.getPlayerChipsAmount(winningPlayerIDx))
+        # csvrow.append(parserAPI.getOnePlayerAction(winningPlayerIDx, 1, 1))
+        # csvrow.append(parserAPI.getOnePlayerAction(winningPlayerIDx, 2, 1))
+        # csvrow.append(parserAPI.getOnePlayerAction(winningPlayerIDx, 3, 1))
+        # csvrow.append(parserAPI.getOnePlayerAction(winningPlayerIDx, 4, 1))
+        # csvrow.append(parserAPI.getOnePlayerAction(winningPlayerIDx, 5, 1))
+        # csvrow.append(parserAPI.getOnePlayerAction(winningPlayerIDx, 6, 1))
+        # csvrow.append(parserAPI.getWinningPlayerAmount())
+        # csvrow.append(parserAPI.getWinningCardsOnTable(1))
+        # csvrow.append(parserAPI.getWinningCardsOnTable(2))
+        # csvrow.append(parserAPI.getWinningCardsOnTable(3))
+        # csvrow.append(parserAPI.getWinningCardsOnTable(4))
+        # csvrow.append(parserAPI.getWinningCardsOnTable(5))
+        # csvFile.writerow(csvrow)
 
 
 
@@ -39,25 +64,19 @@ def writeCSV(gameArray):
     # Some games have winners and losers, other games have only winners or 
     # only losers, and some games have a player who collects the pot
 
-    if (parserAPI.isGameWon()):
-        csvrow.append(parserAPI.getGameID())
+    # if (parserAPI.isGameWon()):
+    #     csvrow.append(parserAPI.getGameID())
 
-        # get just the first winner for simplicity, since there can be two.
-        # If we wanted both, we can use a for loop to iterate over both
-        csvrow.append(parserAPI.getPlayerID(parserAPI.getWinningPlayerIndex())) 
+    #     # get just the first winner for simplicity, since there can be two.
+    #     # If we wanted both, we can use a for loop to iterate over both
+    #     csvrow.append(parserAPI.getPlayerID(parserAPI.getWinningPlayerIndex())) 
         
-        # Get the amount won
-        csvrow.append(parserAPI.getWinningPlayerAmount())
+    #     # Get the amount won
         
-        # gets the cards that were on the table for the first player
-        csvrow.append(parserAPI.getWinningCardsOnTable(1))
-        csvrow.append(parserAPI.getWinningCardsOnTable(2))
-        csvrow.append(parserAPI.getWinningCardsOnTable(3))
-        csvrow.append(parserAPI.getWinningCardsOnTable(4))
-        csvrow.append(parserAPI.getWinningCardsOnTable(5))
+    #     # gets the cards that were on the table for the first player
 
-        # Write the row
-        csvFile.writerow(csvrow)
+    #     # Write the row
+    #     csvFile.writerow(csvrow)
 
 
 
@@ -85,8 +104,14 @@ def writeCSV(gameArray):
 
 
     #### ---- ####
-    
 
+    # Notes:
+    # depending on the number of actions during a game, what are the relations between each other?
+    # seperate winner and other
+    # keep a count of players
+    # 9 columns for winner actions, 9 more columns for other users, add game id, add number of players
+    # 
+    
 
 
 # The main method
@@ -137,6 +162,14 @@ def main(argv):
 
     # open the csv file
     csvFile = csv.writer(open(csvName, "w"))
+
+    # Insert a header
+    csvFile.writerow([
+                        "Game ID", 
+                        "# Players", 
+                        "W Calls", "W Bets", "W Raises", "W All-In", "W Shows", "W Check", "W Fold", "W Muck", "W Sitout", 
+                        "O Calls", "O Bets", "O Raises", "O All-In", "O Shows", "O Check", "O Fold", "O Muck", "O Sitout"
+                    ])
 
     print("Working...")
 
