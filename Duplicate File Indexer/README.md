@@ -6,7 +6,7 @@ Any duplicate found is moved into a folder called `duplicates` one level above t
 
 ## Install
 
-After unzipping [the file](data/DuplicateFileIndexer.zip), run this in the directory:
+After unzipping [the file](https://github.com/devedge/Scripts/raw/master/Duplicate%20File%20Indexer/data/DuplicateFileIndexer.zip), run this in the directory:
 
 `$ npm install`
 
