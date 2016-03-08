@@ -23,3 +23,7 @@ A NodeJS script that scans a directory and all its subdirectories, hashing each 
 <br>
 
 ***
+
+
+# License
+All scripts are licensed under the MIT License

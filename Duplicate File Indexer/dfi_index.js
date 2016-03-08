@@ -36,7 +36,7 @@ if (options.newer) {
 
 
 
-// Iterate recursively over every folder and subfolder to get an array of file.
+// Iterate recursively over every folder and subfolder to get an array of files.
 // Then call the hashAndMap() function to determine duplicates
 recursive(rootpath, function (err, files) {
 
