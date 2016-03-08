@@ -1,4 +1,4 @@
-## ABout
+## About
 
 A NodeJS script that hashes every file in a directory and its subdirectories to find duplicates. <br>
 Any duplicate found is moved into a folder called `duplicates` one level above the searched folder. Also inside the folder is a log showing the original file, the one moved, and their full paths.
@@ -6,7 +6,7 @@ Any duplicate found is moved into a folder called `duplicates` one level above t
 
 ## Install
 
-After unzipping [the file](), run this in the directory:
+After unzipping [the file](data/DuplicateFileIndexer.zip), run this in the directory:
 
 `$ npm install`
 
@@ -16,17 +16,17 @@ to install the packages locally.
 
 ## To Use:
 
-Save the older duplicate files from the filepath "/folder/path/here"
+Saves the older duplicate files and moves the newer versions to a `duplicates` folder
 ```
 $ node dfi_index.js --folder /folder/path/here --older
 ```
 
-Save the newer duplicate files from the filepath "/folder/path/here"
+Saves the newer duplicate files and moves the older versions to a `duplicates` folder
 ```
 $ node dfi_index.js --folder /folder/path/here --newer
 ```
 
-(Default) Saves the older duplicate files from the filepath "/folder/path/here"
+(Default) Saves the older duplicate files and moves the newer versions to a `duplicates` folder
 ```
 $ node dfi_index.js --folder /folder/path/here
 ```
