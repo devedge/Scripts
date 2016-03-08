@@ -114,6 +114,25 @@ function movefile(path, orig, cb) {
 
         filebydate(path, orig, saveOlder, function (returnedFile) {
 
+
+            // check if both of the files still exist.
+            // if one of them doesn't, return the other one (this means that the async move methods
+            // moved one of the files before this one had a chance to do anything)
+            fs.access(path, fs.F_OK, (err) => {
+                // If the older file is no longer available, use the newer one
+                if(err) {
+                    returnedFile = orig;
+                }
+            });
+            
+            fs.access(orig, fs.F_OK, (err) => {
+                // If the newer file is no longer available, use the older one
+                if (err) {
+                    returnedFile = path;
+                }
+            });
+
+
             // move the file
             fs.rename(returnedFile, pathmod.join(duplicatesDir, pathmod.basename(returnedFile)), function(err) {cb(err)});
 
@@ -160,10 +179,14 @@ function filebydate(file1, file2, getOlder, cb) {
         newer = file2;
     }
 
+
     // based on the 'getOlder' boolean value, return the appropriate file
     if (getOlder) {
         cb(older);
     } else {
         cb(newer);
     }
+
+
+
 }
