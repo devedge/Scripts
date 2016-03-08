@@ -19,7 +19,7 @@ Parses the poker dataset found [here](https://web.archive.org/web/20110205042259
 
 [Duplicate File Indexer](https://github.com/devedge/Scripts/tree/master/Duplicate%20File%20Indexer) (Javascript/NodeJS)
 
-A NodeJS script that parser a directory and all its subdirectories, hashing each file to determine if there are any duplicates. Any duplicated are moved into a seperate folder. 
+A NodeJS script that scans a directory and all its subdirectories, hashing each file to determine if there are any duplicates. Any duplicates are moved into a seperate folder. 
 <br>
 
 ***
