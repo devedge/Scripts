@@ -14,7 +14,7 @@ var rootpath = '';
 // node hashIndexer.js --folder /path/to/folder --older
 
 // Get the user input from the command line, then
-// parse the results and save them
+// parse the results
 var cli = commandLineArgs([
     {name: 'folder', alias: 'f', type: String, multiple: false},
     {name: 'older', alias: 'o', type: Boolean},
@@ -24,6 +24,7 @@ var cli = commandLineArgs([
 
 var options = cli.parse();
 
+// Save the user options
 rootpath = options.folder;
 duplicatesDir = pathmod.join(pathmod.dirname(rootpath), duplicatesDir);
 
@@ -115,7 +116,7 @@ function movefile(path, orig, cb) {
         filebydate(path, orig, saveOlder, function (returnedFile) {
 
 
-            // check if both of the files still exist.
+            // check if both of the files still exist (messy workaround).
             // if one of them doesn't, return the other one (this means that the async move methods
             // moved one of the files before this one had a chance to do anything)
             fs.access(path, fs.F_OK, (err) => {
@@ -143,6 +144,7 @@ function movefile(path, orig, cb) {
             var m1 = 'Duplicate (orig) '
             var m2 = '          (dupl) '
 
+            // indicate which file was moved
             if (returnedFile === orig) {
                 m1 = m1 + '(moved): ' + orig + '\n';
                 m2 = m2 + '       : ' + path + '\n';
@@ -154,7 +156,7 @@ function movefile(path, orig, cb) {
 
             var message = m1 + m2 + '\n';
             
-            // append it to a log
+            // append it to the log
             fs.appendFile(logfile, message, function(err) {cb(err)});
         });
     });
@@ -179,14 +181,10 @@ function filebydate(file1, file2, getOlder, cb) {
         newer = file2;
     }
 
-
     // based on the 'getOlder' boolean value, return the appropriate file
     if (getOlder) {
         cb(older);
     } else {
         cb(newer);
     }
-
-
-
 }
