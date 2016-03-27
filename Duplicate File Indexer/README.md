@@ -18,15 +18,15 @@ to install the packages locally.
 
 Saves the older duplicate files and moves the newer versions to a `duplicates` folder
 ```
-$ node dfi_index.js --folder /folder/path/here --older
+$ node duplicate_indexer.js --folder /folder/path/here --older
 ```
 
 Saves the newer duplicate files and moves the older versions to a `duplicates` folder
 ```
-$ node dfi_index.js --folder /folder/path/here --newer
+$ node duplicate_indexer.js --folder /folder/path/here --newer
 ```
 
 (Default) Saves the older duplicate files and moves the newer versions to a `duplicates` folder
 ```
-$ node dfi_index.js --folder /folder/path/here
+$ node duplicate_indexer.js --folder /folder/path/here
 ```

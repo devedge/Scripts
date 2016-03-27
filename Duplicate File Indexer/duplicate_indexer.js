@@ -19,7 +19,6 @@ var cli = commandLineArgs([
     {name: 'folder', alias: 'f', type: String, multiple: false},
     {name: 'older', alias: 'o', type: Boolean},
     {name: 'newer', alias: 'n', type: Boolean}
-
 ]);
 
 var options = cli.parse();

@@ -29,6 +29,8 @@ def writeCSV(gameArray):
         csvrow.append(parserAPI.getGameID())
         csvrow.append(parserAPI.getNumberPlayers())
 
+        csvrow.append(parserAPI.getTotalPot())
+
         wpidx = parserAPI.getWinningPlayerIndex()
 
         # append the action count of the winner
@@ -211,6 +213,7 @@ def main(argv):
     csvFile.writerow([
                         "Game ID", 
                         "# Players", 
+                        "Pot Size",
                         "W Calls", "W Bets", "W Raises", "W All-In", "W Shows", "W Check", "W Fold", "W Muck", "W Sitout", 
                         "O Calls", "O Bets", "O Raises", "O All-In", "O Shows", "O Check", "O Fold", "O Muck", "O Sitout"
                     ])
