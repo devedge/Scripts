@@ -5,14 +5,13 @@ A NodeJS script that scrapes twitter using Cheerio. Currently only extracts foll
 
 ## Setup
 
-After unzipping [the file](https://github.com/devedge/Scripts/raw/master/Web%20Scraping%20with%20Cheerio/data/Scraper.zip), install dependencies with:
+After unzipping [the file](https://github.com/devedge/Scripts/raw/master/Web%20Scraping%20with%20Cheerio/data/Scraper.zip), install dependencies with:<br>
 
-`$ npm install`
+`$ npm install`<br>
 
-<br>
+The script runs with:<br>
+`$ node scrape.js`<br>
 
-The script runs with:
-`$ node scrape.js`
 The twitter @ username currently needs to be manually inserted in scrape.js
 
 <br>
