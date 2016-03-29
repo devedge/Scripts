@@ -24,7 +24,7 @@ request(url, function(err, resp, body) {
         // remove formatting to get only the integer number. The regex removes anything that is not 0 - 9
         followers = followers.replace(/[^0-9]/g, '');
 
-        console.log(username + ' followers: ' + followers);
+        console.log('@' + username + '\'s # of followers: ' + followers);
     } else {
         console.log(err);
     }
