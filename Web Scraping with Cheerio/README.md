@@ -9,15 +9,13 @@ After unzipping [the file](https://github.com/devedge/Scripts/raw/master/Web%20S
 
 `$ npm install`
 
-<br><br><br>
+<br>
 
 The script runs with:
-```
-$ node scrape.js
-```
-<br><br>
+`$ node scrape.js`
 The twitter @ username currently needs to be manually inserted in scrape.js
-<br><br>
+
+<br>
 
 ## TODO
 
