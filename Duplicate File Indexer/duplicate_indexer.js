@@ -43,7 +43,7 @@ recursive(rootpath, function (err, files) {
     if (err) {console.log(err)};
 
     // Print out the number of files that have been found
-    console.log("Parsing " + files.length + ' files');
+    console.log('Parsing ' + files.length + ' files');
 
     // For every file in the array, pass it to the hashAndMap() function
     for (var i = files.length - 1; i >= 0; i--) {
