@@ -4,20 +4,26 @@ Python parser script for a poker dataset taken from [here](https://web.archive.o
 
 ***
 
+Run with: <br>
+```bash
+python csvGenerator.py
+```
+<br>
+or: <br>
+```bash
+python csvGenerator.py /absolute/path/to/dataset/folder outputResults.csv y
+```
+<br>
+Where `/absolute/path/to/dataset/folder`  contains all the (unzipped) text data to mine, `outputResults.csv` is the CSV file that gets generated, and `y` (yes) will overwrite the CSV file if it already exists (`n`, no, will not overwrite the file and will prompt for a new name).
 
-To run, [download the ZIP file](https://github.com/devedge/Scripts/raw/master/Poker%20Dataset%20Parser/data/PokerDatasetParser.zip), extract it, and in the directory, run: `python csvGenerator.py` from the command line. (Note: this has only been tested with Python 3.5)
-<br><br>
+<br>
 
-<b>Advanced:</b> <br> 
-Run with `python csvGenerator.py /absolute/path/to/dataset/folder output.csv y` <br><br>
-The second argument (/absolute/path/to/dataset/folder) is the absolute path to the dataset folder. All of the files in the folder must be the raw text files (eg., uncompress them before running the parser) <br><br>
-The third argument is the CSV output file that will be generated. The fourth (and optional) argument (y), which means 'yes', is to overwrite the specified CSV file if it already exists.<br><br>
+[Download the ZIP containing the script.](https://github.com/devedge/Scripts/raw/master/Poker%20Dataset%20Parser/data/PokerDatasetParser.zip) This has only been tested with Python >= 3.5.<br><br>
 
 
 ## Setup
 
-The structure of the CSV rows needs to be manually defined, as needed, in csvGenerator.py. No other editing needs to be done on the other files.<br>
-More information is provided under the `csvGenerator.py` section below. <br><br>
+The structure of the CSV file (rows and columns) needs to be manually defined in `csvGenerator.py`. None of the other file need to be changed. More information on how to edit the file is defined in the `csvGenerator.py` section below.<br><br>
 
 
 ## Program Logic
