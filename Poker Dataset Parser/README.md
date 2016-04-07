@@ -31,8 +31,7 @@ The structure of the CSV file (rows and columns) needs to be manually defined in
 The general program logic is split up into three different Python files. The parser itself is `datafileParser.py`, the API for interacting with the parser is `parserAPI.py`, and the front-end that handles interaction with the user and creates the CSV files is `csvGenerator.py`.
 
 <br>
-<h5>`csvGenerator.py`     [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/csvGenerator.py)</h5> 
-
+<h5>`csvGenerator.py` [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/csvGenerator.py)</h5> <br>
 The part of the script that needs to be edited is the first method in `writeCSV()` at the top of the file. 
 <br><br>
 The parser returns one game at a time (gameArray), and between the comment headers `#### ---- ####` is the code where each value is added to the current row. For each value you want to add to the current row, use `csvrow.append()`. These values are extracted using methods from `parserAPI.py`, which are all defined below in the `parserAPI.py` section.
@@ -73,34 +72,33 @@ def writeCSV(gameArray):
 The 'csvGenerator.py' script is in charge of getting user input, scanning every directory and subdirectory, passing each file to the datafileParser.py script, and writing the values to a CSV file.
 
 <br><br>
-<h5>`parserAPI.py`     [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/parserAPI.py)</h5> 
-
+<h5>`parserAPI.py` [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/parserAPI.py)</h5> <br>
 This script contains easy to use methods for accessing fields from the game arrays that `datafileParser.py` returns.
 <br><br>
 <b>General Methods:</b>
 <br>
 
-* `getGameID()`
+* `getGameID()` <br>
     Returns the GameID as an Int
-* `getDate()`
+* `getDate()` <br>
     Returns the date as a String
-* `getTime()`
+* `getTime()` <br>
     Returns the time as a String
-* `getTotalPot()`
+* `getTotalPot()` <br>
     Returns the total pot amount as an Int
-* `isGameWon()`
+* `isGameWon()` <br>
     Returns a boolean 'true' if the game was won, and 'false' otherwise
-* `isGameCollected()`
+* `isGameCollected()` <br>
     Returns a boolean 'true' if the game was not won, but a user collected the entire pot. Returns 'false' otherwise.
-* `isGameLost()`
+* `isGameLost()` <br>
     Returns a boolean 'true' if the game was lost, and 'false' otherwise
-* `isDealerDead()`
+* `isDealerDead()` <br>
     Returns a boolean 'true' if the dealer died (disappeared from the game), and 'false' otherwise
-* `isBoardCardsDisplayed()`
+* `isBoardCardsDisplayed()` <br>
     Returns a boolean 'true' if the board cards were displayed, and 'false' otherwise
-* `getBoardCards()`
+* `getBoardCards()` <br>
     Returns an array of Strings, each string containing one of the cards on the board
-* `getNumberRounds()`
+* `getNumberRounds()` <br>
     Returns the number of rounds played as an Int
 
 <br><br>
@@ -150,7 +148,6 @@ Variables used in the following methods:
 
 
 <br><br>
-<h5>`datafileParser.py`     [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/datafileParser.py)</h5> 
-
+<h5>`datafileParser.py` [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/datafileParser.py)</h5> <br>
 This script parses a poker game text file. It saves each game in the file as a gameArray, and saves all of the games in one long gamesList, which is returned. [An example gameArray](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/data/example%20gameArray.txt)
 
