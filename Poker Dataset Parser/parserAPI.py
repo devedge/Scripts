@@ -106,13 +106,16 @@ def getNumberRounds():
 def getNumberPlayers():
     return gameArray[numPlayersIndex]
 
+
 # Get the player ID (string)
 def getPlayerID(playerIndex = 1):
     return gameArray[firstUserIndex - 1 + playerIndex][userIDIndex]
 
+
 # Get the player's dollar amount in chips (float)
 def getPlayerChipsAmount(playerIndex = 1):
     return float(gameArray[firstUserIndex - 1 + playerIndex][userChipsAmount])
+
 
 # Gets the player action at a certain play in the game. Will return the 
 # first action by default. The number of actions a player has taken can 
@@ -128,6 +131,7 @@ def getPlayerChipsAmount(playerIndex = 1):
 def getOnePlayerAction(playerIndex = 1, play = 1, action = 1):
     return gameArray[firstUserIndex - 1 + playerIndex][userPreGameIndex + play - 1][action - 1][0]
 
+
 # A user can take multiple actions during a play, so this returns the number 
 # of actions he has taken
 def getNumActions(playerIndex = 1, play = 1):
@@ -136,6 +140,7 @@ def getNumActions(playerIndex = 1, play = 1):
         return 0
     else:
         return len(gameArray[firstUserIndex - 1 + playerIndex][userPreGameIndex + play - 1])
+
 
 # Returns an array of all the player actions during a play (which is usually 1, but
 # occasionally 2)
