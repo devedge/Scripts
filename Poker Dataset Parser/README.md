@@ -31,7 +31,8 @@ The structure of the CSV file (rows and columns) needs to be manually defined in
 The general program logic is split up into three different Python files. The parser itself is `datafileParser.py`, the API for interacting with the parser is `parserAPI.py`, and the front-end that handles interaction with the user and creates the CSV files is `csvGenerator.py`.
 
 <br>
-<h5>`csvGenerator.py`     [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/csvGenerator.py)</h5>
+<h5>`csvGenerator.py`     [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/csvGenerator.py)</h5> 
+
 The part of the script that needs to be edited is the first method in `writeCSV()` at the top of the file. 
 <br><br>
 The parser returns one game at a time (gameArray), and between the comment headers `#### ---- ####` is the code where each value is added to the current row. For each value you want to add to the current row, use `csvrow.append()`. These values are extracted using methods from `parserAPI.py`, which are all defined below in the `parserAPI.py` section.
@@ -72,30 +73,55 @@ def writeCSV(gameArray):
 The 'csvGenerator.py' script is in charge of getting user input, scanning every directory and subdirectory, passing each file to the datafileParser.py script, and writing the values to a CSV file.
 
 <br><br>
-<h5>`parserAPI.py`     [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/parserAPI.py)</h5>
+<h5>`parserAPI.py`     [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/parserAPI.py)</h5> 
+
 This script contains easy to use methods for accessing fields from the game arrays that `datafileParser.py` returns.
 <br><br>
 <b>General Methods:</b>
 <br>
 
 * `getGameID()`
+    Returns the GameID as an Int
 * `getDate()`
+    Returns the date as a String
 * `getTime()`
+    Returns the time as a String
 * `getTotalPot()`
+    Returns the total pot amount as an Int
 * `isGameWon()`
+    Returns a boolean 'true' if the game was won, and 'false' otherwise
 * `isGameCollected()`
+    Returns a boolean 'true' if the game was not won, but a user collected the entire pot. Returns 'false' otherwise.
 * `isGameLost()`
+    Returns a boolean 'true' if the game was lost, and 'false' otherwise
 * `isDealerDead()`
+    Returns a boolean 'true' if the dealer died (disappeared from the game), and 'false' otherwise
 * `isBoardCardsDisplayed()`
+    Returns a boolean 'true' if the board cards were displayed, and 'false' otherwise
 * `getBoardCards()`
+    Returns an array of Strings, each string containing one of the cards on the board
 * `getNumberRounds()`
+    Returns the number of rounds played as an Int
 
 <br><br>
 <b>General Player Info Methods:</b>
-<br>
-
+<br><br>
+Variables used in the following methods:
+ - `winnerIndex`
+    The game array index of the winner. This is '1' by default in the methods, so it does not have to be specified. If there are several winners though, `getNumberWinners()` can be used to iterate through all the winners (up to two).
+ - `playerIndex` 
+    The index of the player in the array, which is '1' by default in the methods. This can be found using `getLosingPlayerIndex()`, `getWinningPlayerIndex(winnerIndex)`, or by iterating through all the players with `getNumberPlayers()`.
+ - `play`
+    The index of the play in the game array, which is '1' by default in the methods. There are 2 to 6 plays in a poker game, which are "Pre-game actions", "Pocket Cards", "Flop", "Turn", "River", and "Showdown". The total number of plays in a game can be found with `getNumberRounds()`.
+ - `action`
+    The action of a user during a play. This defaults to '1' in the methods.
+ - `cardIDX`
+ -
+<br><br>
 * `getNumberPlayers()`
+    Returns the number of players as an Int
 * `getPlayerID(playerIndex)`
+
 * `getPlayerChipsAmount(playerIndex)`
 * `getOnePlayerAction(playerIndex, play, action)`
 * `getNumActions(playerIndex, play)`
@@ -124,6 +150,7 @@ This script contains easy to use methods for accessing fields from the game arra
 
 
 <br><br>
-<h5>`datafileParser.py`     [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/datafileParser.py)</h5>
+<h5>`datafileParser.py`     [view file](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/datafileParser.py)</h5> 
+
 This script parses a poker game text file. It saves each game in the file as a gameArray, and saves all of the games in one long gamesList, which is returned. [An example gameArray](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/data/example%20gameArray.txt)
 
