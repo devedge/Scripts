@@ -1,70 +1,49 @@
 [
-    3034025962, 
-    '2009-07-05', 
-    '22:25:11(ET)', 
-    5, 
-    ['4d', 'Ad', 'Ah', '6s', '7d'], 
-    175.0, 
-    0,
-    0, 
-    2, 
-    3, 
+    3039332630,                        # 0  game ID
+    '2009-07-07',                      # 1  date
+    '12:25:48(ET)',                    # 2  time and timezone
+    5,                                 # 3  number of rounds
+    ['7s', '5h', 'As', '7c', '3c'],    # 4  cards on board
+    33.0,                              # 5  total pot amount
+    6,                                 # 6  num players
+    1,                                 # 7  dealer player
+    2,                                 # 8  small blind player
+    3,                                 # 9  big blind player
     [
-        True, 
-        False, 
-        1, 
-        [2], 
-        [172.0], 
-        [
-            [['5s', 'Ac']], 
-            [[' B:Ah', 'B:Ad', 'P:Ac', 'B:7d', 'B:6s']], 
-            ['Three of a kind, aces']
+        True,                          # 0 game won              # 10  win info
+        False,                         # 1 only collected
+        1,                             # 2 number of winners
+        [4],                           # 3 index of winners
+        [30.85],                       # 4 money received (for each winner, can be appended)
+        [                              # 5 winning/collected hand
+            [['Ad', '8h']],            # 0 cards played (usually two)
+            [['B:As', 'P:Ad', 'B:7s', 'B:7c', 'P:8h']],   # 1 cards on table (usually five)
+            ['Two Pair, aces and sevens(eight kicker)']   # 2 card description
         ]
     ], 
     [
-        False, 
-        0, 
-        [
-            ['NA'], 
-            ['NA'], 
-            ''
+        True,                          #  is there a loser      # 11  lost info
+        3,                             #  index of loser
+        [                              #  losing hand
+            ['Ah', '6d'],              # cards played (usually two)
+            ['B:As', 'P:Ah', 'B:7s', 'B:7c', 'P:6d'],     # cards on table (usually five)
+            'Two Pair, aces and sevens'                   # card description
         ]
     ], 
     [
-        'PpOAyDDRBlaAmII72ax0Bg', 
-        2339.25, 
-        [['Ante', 2.5]], 
-        [['Calls', 10.0]], 
-        [['Calls', 25.0]], 
-        [['Bets', 40.0]], 
-        [['Checks']], 
-        [['Mucks']]
+        'PQVEgCUzDSdSNFZD5wXuvw',      # player ID
+        198.0,                         # dollars in chips
+        [['NA']],                      # user actions before the game starts (usually empty, other than small/big blind, antes, or sitout)
+        [['Folds']],                   # user actions during the pocket cards
+        [['NA']],                      # user actions during the flop
+        [['NA']],                      # user actions during the turn
+        [['NA']],                      # user actions during the river
+        [['NA']]                       # user actions during the showdown
     ], 
     [
-        '3wT3m+GDGtVWU1KR2MWJ1Q', 
-        1869.35, 
-        [['Ante', 2.5], ['Posts small blind', 5.0]], 
-        [['Calls', 5.0]], 
-        [['Bets', 25.0]], 
-        [['Checks'], ['Calls', 40.0]], 
-        [['Checks']], 
-        [['Shows', ['5s', 'Ac']], 
-        ['Collects', 172.0]]
-    ], 
-    [
-        'X+u4T/E5ANkyZLKm1YjqwQ', 
-        2314.0, 
-        [['Ante', 2.5], ['Posts big blind', 10.0]], 
-        [['Checks']], 
-        [['Folds']], 
-        [['NA']], 
-        [['NA']], 
-        [['NA']]
-    ], 
-    [
-        '8z33KASCGgAHVfxu6HD4UA', 
-        882.75, 
-        [['Ante', 2.5]], 
+        'rgOnpLfFy41kcunwSZiZIA', 
+        315.35, 
+        [['Posts small blind', 1.0]], 
         [['Folds']], 
         [['NA']], 
         [['NA']], 
@@ -72,9 +51,30 @@
         [['NA']]
     ], 
     [
-        '5ZmcsS+lDu7K17gR9h2B4A', 
-        1008.25, 
-        [['Ante', 2.5]], 
+        'iLXjlX7GiTc2dQsqWQEGNA', 
+        97.0, 
+        [['Posts big blind', 2.0]], 
+        [['Checks']], 
+        [['Bets', 4.0], ['Calls', 4.0]], 
+        [['Checks'], ['Calls', 6.0]], 
+        [['Checks']], 
+        [['Shows', ['Ah', '6d']]]
+    ], 
+    [
+        '5CpYtIEVueIoxdY5Zej0Kw', 
+        586.7, 
+        [['NA']], 
+        [['Calls', 2.0]], 
+        [['Raises', ['8', '8']]], 
+        [['Bets', 6.0]], 
+        [['Checks']], 
+        [['Shows', ['Ad', '8h']], 
+        ['Collects', 30.85]]
+    ], 
+    [
+        'T39pL39SjbaS2PMPefu2zQ', 
+        450.43, 
+        [['NA']], 
         [['Folds']], 
         [['NA']], 
         [['NA']], 
@@ -82,9 +82,9 @@
         [['NA']]
     ], 
     [
-        'H7TvAHMQX+bVR81Nq796DQ', 
-        352.0, 
-        [['Ante', 2.5]], 
+        'NWBPM+8o1tSQ2ZNVW4jdWw', 
+        141.6, 
+        [['NA']], 
         [['Folds']], 
         [['NA']], 
         [['NA']], 
