@@ -76,7 +76,7 @@ def writeCSV(gameArray):
         csvrow.append(otherActionArray[7])
         csvrow.append(otherActionArray[8])
 
-
+        # Writes the current row to disk
         csvFile.writerow(csvrow)
 
 

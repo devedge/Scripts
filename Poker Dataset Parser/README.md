@@ -34,14 +34,40 @@ The general program logic is split up into three different Python files. The par
 <br>
 <h5>`csvGenerator.py`     [view](https://github.com/devedge/Scripts/blob/master/Poker%20Dataset%20Parser/csvGenerator.py)</h5> <br>
 The part of the script that needs to be edited is the first method in `writeCSV()` at the top of the file. 
+<br>
+The parser returns one game at a time (gameArray), and between the comment headers `#### ---- ####` is the code where each value is added to the current row. For each value you want to add to the current row, use `csvrow.append()`. These values are extracted using methods from `parserAPI.py`, which are all defined below in the `parserAPI.py` section.
+<br>
+For example in the code provided below:
+ - `parserAPI.getGameID()` returns the current game's ID
+ - `parserAPI.getDate()` returns the date of the game
+ - `parserAPI.isGameWon()` returns 'true' if the game was won, and 'false' if otherwise
+ - `parserAPI.getTotalPot()` returns the game's total pot amount
+<br>
+```python
+# Writes the csv file from information gathered from the gameArray
+def writeCSV(gameArray):
+    global csvFile
 
+    # Initialize the gameArray in parserAPI
+    parserAPI.initGameArray(gameArray)
 
-The only part of the script that needs to be edited is `writeCSV()`, between the comment headers `#### ---- ####`. Examples are provided in the file. <br><br>
+    # array of values taken from parserAPI.py using the gameArray
+    csvrow =  []
 
-For each row that you want to have in the CSV file, use `csvrow.append()` to add the value from the gameArray. These values are extracted using the API methods from parserAPI.py. All of the possible methods you can use are provided below under the `parserAPI.py` section.<br><br>
-For example, to get the game ID of each game, you would use `parserAPI.getGameID()`. <br>
-Appending it as a row in the CSV file would look like: `csvrow.append(parserAPI.getGameID())` <br>
-After all of the values have been appended, use `csvFile.writerow(csvrow)` to write the row to the file.
+    #### ---- ####  Edit this part so the values are appended to the array as a row
+
+    # For each game, store the game ID, date, if the game was won, what the total pot was
+    csvrow.append(parserAPI.getGameID())
+    csvrow.append(parserAPI.getDate())
+    csvrow.append(parserAPI.isGameWon())
+    csvrow.append(parserAPI.getTotalPot())
+
+    #### ---- ####
+
+    # Writes the current row to disk
+    csvFile.writerow(csvrow)
+```
+
 
 <br>
 The 'csvGenerator.py' script is in charge of getting user input, scanning every directory and subdirectory, passing each file to the datafileParser.py script, and writing the values to a CSV file.
