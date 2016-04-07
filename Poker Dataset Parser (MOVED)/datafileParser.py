@@ -99,9 +99,9 @@ def initGameArray():
                         ]  
                     ],
                     [
-                        False,      #  is there a loser      # 11  lost info
-                        0,          #  index of loser
-                        [           #  losing hand
+                        False,       #  is there a loser      # 11  lost info
+                        0,           #  index of loser
+                        [            #  losing hand
                             ["NA"],  # cards played (usually two)
                             ["NA"],  # cards on table (usually five)
                             ""       # card description
