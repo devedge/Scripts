@@ -16,6 +16,7 @@ ineed.collect.images.from(url, function (err, response, result) {
     } else {
         console.log('Extracting image links from \"' + url + '\"...');
 
+        // call the function that gets all the image links
         fetch_links(result);
     }
 });
@@ -34,14 +35,14 @@ function fetch_links(result) {
         // request the image and write it to the Images folder
         request({
             uri: imgstring.src,
-            encoding: null
+            encoding: null      // needed for writing the image as binary data
         }, function (err, resp, data) {
             if (!err && resp.statusCode === 200) {
 
                 // write the file
                 fs.writeFile('Images/' + name, data, function (err) {
                     if (err) { 
-                        console.log(err); 
+                        console.log('ERROR - ' + err); 
                     } else {
                         console.log('DONE - ' + imgstring.src);
                     }
