@@ -19,12 +19,7 @@ const fs = require('fs');
 
 
 var items;
-var url = 'https://gist.github.com/paolorossi/1993068';
-url = 'https://www.reddit.com/r/roosterteeth/comments/4qnu1v/slow_mo_guys_and_burnie_answer_googles_most/';
-
-// url = 'https://www.youtube.com/watch?v=hFomUM0DoNA';
-// url = 'https://github.com/inikulin/ineed';
-// url = 'http://www.hearthcards.net/';
+var url = '';
 
 var filename; // max length of 40 (currently)
 var home_folder;
