@@ -5,15 +5,17 @@ const fs = require('fs');
 
 var url = 'https://github.com/devedge';
 
-
+// make the images folder
 mkdirp.sync('Images');
 
 // Run the image collector on the url
 ineed.collect.images.from(url, function (err, response, result) {
     // body...
     if (err) { 
-        console.log('ERROR: ' + err);
+        console.log('ERROR - ' + err)
     } else {
+        console.log('Extracting image links from \"' + url + '\"...');
+
         fetch_links(result);
     }
 });
@@ -22,29 +24,35 @@ ineed.collect.images.from(url, function (err, response, result) {
 // Iterate over all the images and download them
 function fetch_links(result) {
     result.images.forEach(function (imgstring) {
-        console.log(imgstring.src);
 
+        // remove any invalid characters from the name
         var name = imgstring.src.match('[^/]*$')[0]
                             .replace('&', '')
                             .replace('<', '')
                             .replace('>', '');
 
-
+        // request the image and write it to the Images folder
         request({
             uri: imgstring.src,
             encoding: null
         }, function (err, resp, data) {
             if (!err && resp.statusCode === 200) {
 
+                // write the file
                 fs.writeFile('Images/' + name, data, function (err) {
-                    if (err) { console.log(err); }
+                    if (err) { 
+                        console.log(err); 
+                    } else {
+                        console.log('DONE - ' + imgstring.src);
+                    }
                 });
 
             } else {
-                console.log('ERROR: ' + err);
+                console.log('ERROR - ' + err);
             }
         });
         
+
     });
 }
 
