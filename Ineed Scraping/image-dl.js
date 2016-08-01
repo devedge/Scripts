@@ -1,29 +1,84 @@
-#!/usr/bin/env node
+// #!/usr/bin/env node
 
 const commandLineArgs = require('command-line-args');
+const colors = require('colors/safe');
+
 const request = require('request');
 const mkdirp = require('mkdirp');
 const ineed = require('ineed');
 const fs = require('fs');
-var url = '';
 
 
-
-
-// Set the options
-const cli_options = [
+// Set the cli options
+const cli = [
     {name: 'url', alias: 'u', type: String, multiple: false},
     {name: 'folder', alias: 'f', type: String, multiple: false}
 ];
 
-// parse the options
-const options = commandLineArgs(cli_options);
+// Parse the options passed in
+const options = commandLineArgs(cli);
 
-console.log(options);
+// var url = options.url;
+// var folder = options.folder;
 
-if (options.url === null) {
-    console.log('null url');
+// console.log(options);
+
+
+if (options.url !== null) {
+    
+    // url = options.url;
+
+    // If a folder hasn't been specified, create one here
+    if (options.folder === null) {
+        // make a folder in the current directory
+
+    } else {
+        // Use the specified folder 
+        // folder = options.folder;
+    }
+
+
+    // if the url starts with 'https://' or 'http://', don't add it
+    // else add 'http://', since there may not be an https connection
+
+
+    // Run the image collector on the url
+    ineed.collect.images.from(options.url, function (err, response, result) {
+        if (err) { 
+            console.log(colors.red(err));
+        } else {
+            console.log(colors.green('Extracting images from: %s'), options.url);
+            console.log(result.images.length + ' image(s) found');
+
+            // call the function that gets all the image links
+            // fetch_links(result);
+        }
+    });
+
+
+    
+} else {
+    // print usage info
+    console.log('null options');
 }
+
+
+
+
+
+
+
+
+// If the url hasn't been provided
+// if (options.url === null) {
+//     console.log('Usage:');
+//     console.log('   image-dl -u <link to scrape> -f <folder to save images>');
+
+//     process.exit();
+// } else {
+
+
+// }
 
 
 // var url = 'https://github.com/devedge';
@@ -36,18 +91,6 @@ if (options.url === null) {
 // make the images folder
 // mkdirp.sync('Images');
 
-// Run the image collector on the url
-ineed.collect.images.from(url, function (err, response, result) {
-    // body...
-    if (err) { 
-        console.log('ERROR - ' + err)
-    } else {
-        console.log('Extracting image links from \"' + url + '\"...');
-
-        // call the function that gets all the image links
-        fetch_links(result);
-    }
-});
 
 
 // Iterate over all the images and download them
@@ -86,32 +129,17 @@ function fetch_links(result) {
 }
 
 
+// output
+
+/*
+
+Extracting images from <>...
+63 images found
+DONE - https
+DONE - https
 
 
 
 
+*/
 
-
-
-
-
-
-
-
-
-// var commandLineArgs = require('command-line-args');
-
-
-
-// var cli = commandLineArgs(
-//     {name: '-url', alias: 'u', type: String, multiple: false}
-// );
-
-// var options = cli.parse();
-
-
-// if (options.url) {
-
-// } else {
-//     console.log('url needed');
-// }
