@@ -58,14 +58,6 @@ if (!(typeof options.url === undefined) && options.url !== null) {
 }
 
 
-// General application usage information
-function print_usage() {
-    console.log('');
-    console.log('Usage: image-dl -u <link to scrape> -f <folder to save images>');
-    console.log('Example: ');
-    console.log('       image-dl -u google.com');
-    console.log('       image-dl -u google.com -f ~/Desktop/google/');
-}
 
 
 // Return a url that can safely be queried by the 'request' module
@@ -83,6 +75,14 @@ function parse_url(input) {
 }
 
 
+// General application usage information
+function print_usage() {
+    console.log('');
+    console.log('Usage: image-dl -u <link to scrape> -f <folder to save images>');
+    console.log('Example: ');
+    console.log('       image-dl -u google.com');
+    console.log('       image-dl -u google.com -f ~/Desktop/google/');
+}
 
 
 
