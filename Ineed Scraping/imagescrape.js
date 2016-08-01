@@ -1,9 +1,20 @@
+const commandLineArgs = require('command-line-args');
 const request = require('request');
 const mkdirp = require('mkdirp');
 const ineed = require('ineed');
 const fs = require('fs');
+var url = '';
 
-var url = 'https://github.com/devedge';
+const cli_options = [
+    {name: 'url', alias: 'u', type: String, multiple: false},
+    {name: 'folder', alias: 'f', type: String, multiple: false}
+];
+
+const options = commandLineArgs(cli_options);
+
+console.log(options);
+
+// var url = 'https://github.com/devedge';
 
 // make the images folder
 mkdirp.sync('Images');
@@ -17,7 +28,7 @@ ineed.collect.images.from(url, function (err, response, result) {
         console.log('Extracting image links from \"' + url + '\"...');
 
         // call the function that gets all the image links
-        fetch_links(result);
+        // fetch_links(result);
     }
 });
 
