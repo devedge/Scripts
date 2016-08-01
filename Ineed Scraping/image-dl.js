@@ -23,11 +23,8 @@ const options = commandLineArgs(cli);
 
 // console.log(options);
 
-
-if (options.url !== null) {
+if (!(typeof options.url === undefined) && options.url !== null) {
     
-    // url = options.url;
-
     // If a folder hasn't been specified, create one here
     if (options.folder === null) {
         // make a folder in the current directory
@@ -38,14 +35,13 @@ if (options.url !== null) {
     }
 
 
-    // if the url starts with 'https://' or 'http://', don't add it
-    // else add 'http://', since there may not be an https connection
-
-
     // Run the image collector on the url
-    ineed.collect.images.from(options.url, function (err, response, result) {
-        if (err) { 
+    ineed.collect.images.from(parse_url(options.url), function (err, response, result) {
+
+        if (err) {
             console.log(colors.red(err));
+            print_usage();
+            
         } else {
             console.log(colors.green('Extracting images from: %s'), options.url);
             console.log(result.images.length + ' image(s) found');
@@ -55,15 +51,36 @@ if (options.url !== null) {
         }
     });
 
-
-    
 } else {
-    // print usage info
-    console.log('null options');
+    // print error and usage info
+    console.log(colors.red('ERROR - A url must be specified'));
+    print_usage();
 }
 
 
+// General application usage information
+function print_usage() {
+    console.log('');
+    console.log('Usage: image-dl -u <link to scrape> -f <folder to save images>');
+    console.log('Example: ');
+    console.log('       image-dl -u google.com');
+    console.log('       image-dl -u google.com -f ~/Desktop/google/');
+}
 
+
+// Return a url that can safely be queried by the 'request' module
+function parse_url(input) {
+    // if the url starts with 'https://' or 'http://', don't add it
+    // else add 'http://', since there may not be an https connection
+
+    if ((input.match(/^https:\/\//) !== null) || 
+        (input.match(/^http:\/\//) !== null)) {
+
+        return input;
+    } else {
+        return 'http://' + input;
+    }
+}
 
 
 
