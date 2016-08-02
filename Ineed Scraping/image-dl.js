@@ -1,6 +1,7 @@
 // #!/usr/bin/env node
 
 const commandLineArgs = require('command-line-args');
+const sanitize = require('sanitize-filename');
 const colors = require('colors/safe');
 
 const request = require('request');
@@ -41,7 +42,7 @@ if (!(typeof options.url === undefined) && options.url !== null) {
         if (err) {
             console.log(colors.red(err));
             print_usage();
-            
+
         } else {
             console.log(colors.green('Extracting images from: %s'), options.url);
             console.log(result.images.length + ' image(s) found');
@@ -112,6 +113,11 @@ function print_usage() {
 
 // Iterate over all the images and download them
 function fetch_links(result) {
+
+    // if the folder already exists, mkdirp will ignore
+    mkdirp.sync();
+    console.log('Saving to %s', folder);
+
     result.images.forEach(function (imgstring) {
 
         // remove any invalid characters from the name
@@ -132,7 +138,7 @@ function fetch_links(result) {
                     if (err) { 
                         console.log('ERROR - ' + err); 
                     } else {
-                        console.log('DONE - ' + imgstring.src);
+                        console.log(colors.green('DONE - ') + imgstring.src);
                     }
                 });
 

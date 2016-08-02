@@ -8,7 +8,8 @@
     "command-line-args": "^3.0.0",
     "ineed": "^1.0.4",
     "mkdirp": "^0.5.1",
-    "request": "^2.74.0"
+    "request": "^2.74.0",
+    "sanitize-filename": "^1.6.0"
   },
   "devDependencies": {},
   "scripts": {
