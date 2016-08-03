@@ -25,15 +25,17 @@ const options = commandLineArgs(cli);
 // console.log(options);
 
 if (!(typeof options.url === undefined) && options.url !== null) {
+    // make the images folder
+    mkdirp.sync('Images');
     
     // If a folder hasn't been specified, create one here
-    if (options.folder === null) {
-        // make a folder in the current directory
+    // if (options.folder === null) {
+    //     // make a folder in the current directory
 
-    } else {
-        // Use the specified folder 
-        // folder = options.folder;
-    }
+    // } else {
+    //     // Use the specified folder 
+    //     // folder = options.folder;
+    // }
 
 
     // Run the image collector on the url
@@ -48,7 +50,7 @@ if (!(typeof options.url === undefined) && options.url !== null) {
             console.log(result.images.length + ' image(s) found');
 
             // call the function that gets all the image links
-            // fetch_links(result);
+            fetch_links(result);
         }
     });
 
@@ -73,6 +75,13 @@ function parse_url(input) {
     } else {
         return 'http://' + input;
     }
+}
+
+
+function gen_foldername(input) {
+
+
+    return sanitize(input);
 }
 
 
@@ -106,8 +115,6 @@ function print_usage() {
 
 
 
-// make the images folder
-// mkdirp.sync('Images');
 
 
 
@@ -115,8 +122,10 @@ function print_usage() {
 function fetch_links(result) {
 
     // if the folder already exists, mkdirp will ignore
-    mkdirp.sync();
-    console.log('Saving to %s', folder);
+    // mkdirp.sync();
+    // console.log('Saving to %s', folder);
+
+    console.log('Starting array loop');
 
     result.images.forEach(function (imgstring) {
 
@@ -126,6 +135,8 @@ function fetch_links(result) {
                             .replace('<', '')
                             .replace('>', '');
 
+        console.log('   -- requesting: ' + imgstring.src);
+
         // request the image and write it to the Images folder
         request({
             uri: imgstring.src,
@@ -133,12 +144,14 @@ function fetch_links(result) {
         }, function (err, resp, data) {
             if (!err && resp.statusCode === 200) {
 
+                console.log('   -- saving');
+
                 // write the file
                 fs.writeFile('Images/' + name, data, function (err) {
                     if (err) { 
                         console.log('ERROR - ' + err); 
                     } else {
-                        console.log(colors.green('DONE - ') + imgstring.src);
+                        console.log(/*colors.green(*/'DONE - '/*)*/ + imgstring.src);
                     }
                 });
 
@@ -160,6 +173,10 @@ Extracting images from <>...
 63 images found
 DONE - https
 DONE - https
+
+
+
+
 
 
 
