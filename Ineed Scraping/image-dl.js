@@ -1,13 +1,17 @@
 // #!/usr/bin/env node
 
-const commandLineArgs = require('command-line-args');
-const sanitize = require('sanitize-filename');
 const colors = require('colors/safe');
+const sanitize = require('sanitize-filename');
+const commandLineArgs = require('command-line-args');
 
-const request = require('request');
-const mkdirp = require('mkdirp');
-const ineed = require('ineed');
 const fs = require('fs');
+const ineed = require('ineed');
+const mkdirp = require('mkdirp');
+const request = require('request');
+
+// Event emitter to handle different use cases
+const events = require('events');
+const eventEmitter = new events();
 
 
 // Set the cli options
@@ -19,24 +23,35 @@ const cli = [
 // Parse the options passed in
 const options = commandLineArgs(cli);
 
-// var url = options.url;
-// var folder = options.folder;
 
-// console.log(options);
 
-if (!(typeof options.url === undefined) && options.url !== null) {
+
+
+// console.log(options.url);
+
+
+// Define the event emitters (BEFORE caling them)
+// event emitter for handling errors
+eventEmitter.on('error', function(message, printusage) {
+
+    console.log('ERROR - ' + message);
+
+    if (printusage) {
+        console.log('');
+        console.log('Usage: image-dl -u <link to scrape> -f <folder to save images>');
+        console.log('Example: ');
+        console.log('       image-dl -u google.com');
+        console.log('       image-dl -u google.com -f ~/Desktop/google/');
+    }
+});
+
+
+
+
+// Program start
+if (options.url !== undefined) {
     // make the images folder
     mkdirp.sync('Images');
-    
-    // If a folder hasn't been specified, create one here
-    // if (options.folder === null) {
-    //     // make a folder in the current directory
-
-    // } else {
-    //     // Use the specified folder 
-    //     // folder = options.folder;
-    // }
-
 
     // Run the image collector on the url
     ineed.collect.images.from(parse_url(options.url), function (err, response, result) {
@@ -47,7 +62,7 @@ if (!(typeof options.url === undefined) && options.url !== null) {
 
         } else {
             console.log(colors.green('Extracting images from: %s'), options.url);
-            console.log(result.images.length + ' image(s) found');
+            console.log(result.images.length + ' image(s) found - Requesting...');
 
             // call the function that gets all the image links
             fetch_links(result);
@@ -55,10 +70,37 @@ if (!(typeof options.url === undefined) && options.url !== null) {
     });
 
 } else {
-    // print error and usage info
-    console.log(colors.red('ERROR - A url must be specified'));
-    print_usage();
+    eventEmitter.emit('error', 'A url must be specified', true);
 }
+
+
+
+
+
+
+
+// var url = options.url;
+// var folder = options.folder;
+
+
+// if (options.url !== null) {
+    
+//     // If a folder hasn't been specified, create one here
+//     // if (options.folder === null) {
+//     //     // make a folder in the current directory
+
+//     // } else {
+//     //     // Use the specified folder 
+//     //     // folder = options.folder;
+//     // }
+
+
+
+// } else {
+//     // print error and usage eventEmitter
+//     console.log(colors.red('ERROR - A url must be specified'));
+//     print_usage();
+// }
 
 
 
@@ -86,13 +128,8 @@ function gen_foldername(input) {
 
 
 // General application usage information
-function print_usage() {
-    console.log('');
-    console.log('Usage: image-dl -u <link to scrape> -f <folder to save images>');
-    console.log('Example: ');
-    console.log('       image-dl -u google.com');
-    console.log('       image-dl -u google.com -f ~/Desktop/google/');
-}
+// function print_usage() {
+// }
 
 
 
@@ -137,7 +174,7 @@ function fetch_links(result) {
 
         console.log('   -- requesting: ' + imgstring.src);
 
-        // request the image and write it to the Images folder
+        // asynchronously request the image and write it to the Images folder
         request({
             uri: imgstring.src,
             encoding: null      // needed for writing the image as binary data
@@ -156,6 +193,7 @@ function fetch_links(result) {
                 });
 
             } else {
+                eventEmitter.emit('error', 'request failed', false);
                 console.log('ERROR - ' + err);
             }
         });
@@ -182,4 +220,10 @@ DONE - https
 
 
 */
+
+
+
+
+
+
 
