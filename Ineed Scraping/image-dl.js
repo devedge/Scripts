@@ -31,10 +31,16 @@ const options = commandLineArgs(cli);
 
 
 // Define the event emitters (BEFORE caling them)
-// event emitter for handling errors
-eventEmitter.on('error', function(message, printusage) {
 
-    console.log('ERROR - ' + message);
+// event emitter for handling errors
+eventEmitter.on('error', function(message, err, printusage) {
+
+    // Automatically log the error to the console
+    if (err) {
+        console.log(colors.red('ERROR') + ' - ' + message + ': ' + err);
+    } else {
+        console.log(colors.red('ERROR') + ' - ' + message);
+    }
 
     if (printusage) {
         console.log('');
@@ -50,30 +56,86 @@ eventEmitter.on('error', function(message, printusage) {
 
 // Program start
 if (options.url !== undefined) {
-    // make the images folder
+
+    // make the images folder (improve)
     mkdirp.sync('Images');
 
     // Run the image collector on the url
     ineed.collect.images.from(parse_url(options.url), function (err, response, result) {
 
         if (err) {
-            console.log(colors.red(err));
-            print_usage();
+            eventEmitter.emit('error', 'Link request failed', err, false);
 
         } else {
             console.log(colors.green('Extracting images from: %s'), options.url);
-            console.log(result.images.length + ' image(s) found - Requesting...');
 
-            // call the function that gets all the image links
-            fetch_links(result);
+            // Print out how many images were found
+            if (result.images.length === 0) {
+                console.log(result.images.length + ' image(s) found');
+
+            } else {
+                console.log(result.images.length + ' image(s) found - Requesting...');
+
+                // call the function that gets all the image links
+                request_images(result);
+            }
+
         }
     });
 
 } else {
-    eventEmitter.emit('error', 'A url must be specified', true);
+    eventEmitter.emit('error', 'A url must be specified', null, true);
 }
 
 
+
+
+// Iterate over all the images and download them
+function request_images(result) {
+
+    // if the folder already exists, mkdirp will ignore
+    // mkdirp.sync();
+    // console.log('Saving to %s', folder);
+
+    // console.log('Starting array loop');
+
+    result.images.forEach(function (imgstring) {
+
+        // remove any invalid characters from the name
+        var name = imgstring.src.match('[^/]*$')[0]
+                            .replace('&', '')
+                            .replace('<', '')
+                            .replace('>', '');
+
+        console.log('   -- requesting: ' + imgstring.src);
+
+        // asynchronously request the image and write it to the Images folder
+        request({
+            uri: imgstring.src,
+            encoding: null      // needed for writing the image as binary data
+        }, function (err, resp, data) {
+            if (!err && resp.statusCode === 200) {
+
+                // console.log('   -- saving');
+
+                // write the file
+                fs.writeFile('Images/' + name, data, function (err) {
+                    if (err) { 
+                        console.log('ERROR - ' + err); 
+                    } else {
+                        console.log(colors.green('DONE') + ' - ' + imgstring.src);
+                    }
+                });
+
+            } else {
+                eventEmitter.emit('error', 'Image request failed', false);
+                // console.log('ERROR - ' + err);
+            }
+        });
+        
+
+    });
+}
 
 
 
@@ -155,52 +217,7 @@ function gen_foldername(input) {
 
 
 
-// Iterate over all the images and download them
-function fetch_links(result) {
 
-    // if the folder already exists, mkdirp will ignore
-    // mkdirp.sync();
-    // console.log('Saving to %s', folder);
-
-    console.log('Starting array loop');
-
-    result.images.forEach(function (imgstring) {
-
-        // remove any invalid characters from the name
-        var name = imgstring.src.match('[^/]*$')[0]
-                            .replace('&', '')
-                            .replace('<', '')
-                            .replace('>', '');
-
-        console.log('   -- requesting: ' + imgstring.src);
-
-        // asynchronously request the image and write it to the Images folder
-        request({
-            uri: imgstring.src,
-            encoding: null      // needed for writing the image as binary data
-        }, function (err, resp, data) {
-            if (!err && resp.statusCode === 200) {
-
-                console.log('   -- saving');
-
-                // write the file
-                fs.writeFile('Images/' + name, data, function (err) {
-                    if (err) { 
-                        console.log('ERROR - ' + err); 
-                    } else {
-                        console.log(/*colors.green(*/'DONE - '/*)*/ + imgstring.src);
-                    }
-                });
-
-            } else {
-                eventEmitter.emit('error', 'request failed', false);
-                console.log('ERROR - ' + err);
-            }
-        });
-        
-
-    });
-}
 
 
 // output
