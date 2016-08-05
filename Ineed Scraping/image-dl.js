@@ -13,6 +13,7 @@ const request = require('request');
 const events = require('events');
 const eventEmitter = new events();
 
+var folder = '';
 
 // Set the cli options
 const cli = [
@@ -22,9 +23,6 @@ const cli = [
 
 // Parse the options passed in
 const options = commandLineArgs(cli);
-
-
-
 
 
 // console.log(options.url);
@@ -57,8 +55,17 @@ eventEmitter.on('error', function(message, err, printusage) {
 // Program start
 if (options.url !== undefined) {
 
-    // make the images folder (improve)
-    mkdirp.sync('Images');
+    if (options.folder === undefined) {
+
+        // use the url as the folder name
+        folder = sanitize(options.url.match('[^/]*$')[0]);
+        mkdirp.sync(folder);
+
+    } else {
+        // check that the specified folder exists
+    }
+
+    console.log('Saving to folder: ' + folder);
 
     // Run the image collector on the url
     ineed.collect.images.from(parse_url(options.url), function (err, response, result) {
