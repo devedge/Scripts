@@ -78,7 +78,7 @@ if (options.url !== undefined) {
             console.log(colors.green('Extracting images from: %s'), options.url);
 
             console.log('Saving to folder: ' + folder);
-            
+
             // Print out how many images were found
             if (result.images.length === 0) {
                 console.log(result.images.length + ' image(s) found');
@@ -143,111 +143,6 @@ function request_images(result) {
 
     });
 }
-
-
-
-
-
-// var url = options.url;
-// var folder = options.folder;
-
-
-// if (options.url !== null) {
-    
-//     // If a folder hasn't been specified, create one here
-//     // if (options.folder === null) {
-//     //     // make a folder in the current directory
-
-//     // } else {
-//     //     // Use the specified folder 
-//     //     // folder = options.folder;
-//     // }
-
-
-
-// } else {
-//     // print error and usage eventEmitter
-//     console.log(colors.red('ERROR - A url must be specified'));
-//     print_usage();
-// }
-
-
-
-
-// Return a url that can safely be queried by the 'request' module
-function parse_url(input) {
-    // if the url starts with 'https://' or 'http://', don't add it
-    // else add 'http://', since there may not be an https connection
-
-    if ((input.match(/^https:\/\//) !== null) || 
-        (input.match(/^http:\/\//) !== null)) {
-
-        return input;
-    } else {
-        return 'http://' + input;
-    }
-}
-
-
-function gen_foldername(input) {
-
-
-    return sanitize(input);
-}
-
-
-// General application usage information
-// function print_usage() {
-// }
-
-
-
-// If the url hasn't been provided
-// if (options.url === null) {
-//     console.log('Usage:');
-//     console.log('   image-dl -u <link to scrape> -f <folder to save images>');
-
-//     process.exit();
-// } else {
-
-
-// }
-
-
-// var url = 'https://github.com/devedge';
-
-
-
-
-
-
-
-
-
-
-
-
-// output
-
-/*
-
-Extracting images from <>...
-63 images found
-DONE - https
-DONE - https
-
-
-
-
-
-
-
-
-*/
-
-
-
-
 
 
 
