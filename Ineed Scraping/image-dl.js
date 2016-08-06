@@ -99,7 +99,6 @@ if (options.url !== undefined) {
 
 
 
-
 // Iterate over all the images and download them
 function request_images(result) {
 
@@ -135,15 +134,13 @@ function request_images(result) {
                 });
 
             } else {
-                eventEmitter.emit('error', 'Image request failed', false);
-                // console.log('ERROR - ' + err);
+                eventEmitter.emit('error', 'Image request failed', err, false);
             }
         });
         
 
     });
 }
-
 
 
 
@@ -160,4 +157,3 @@ function parse_url(input) {
         return 'http://' + input;
     }
 }
-
