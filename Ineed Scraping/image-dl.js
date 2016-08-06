@@ -51,7 +51,6 @@ eventEmitter.on('error', function(message, err, printusage) {
 
 
 
-
 // Program start
 if (options.url !== undefined) {
 
@@ -62,10 +61,12 @@ if (options.url !== undefined) {
         mkdirp.sync(folder);
 
     } else {
+        folder = options.folder;
+
         // check that the specified folder exists
+
     }
 
-    console.log('Saving to folder: ' + folder);
 
     // Run the image collector on the url
     ineed.collect.images.from(parse_url(options.url), function (err, response, result) {
@@ -76,6 +77,8 @@ if (options.url !== undefined) {
         } else {
             console.log(colors.green('Extracting images from: %s'), options.url);
 
+            console.log('Saving to folder: ' + folder);
+            
             // Print out how many images were found
             if (result.images.length === 0) {
                 console.log(result.images.length + ' image(s) found');
@@ -109,12 +112,9 @@ function request_images(result) {
     result.images.forEach(function (imgstring) {
 
         // remove any invalid characters from the name
-        var name = imgstring.src.match('[^/]*$')[0]
-                            .replace('&', '')
-                            .replace('<', '')
-                            .replace('>', '');
+        var name = sanitize(imgstring.src.match('[^/]*$')[0]);
 
-        console.log('   -- requesting: ' + imgstring.src);
+        // console.log('   -- requesting: ' + imgstring.src);
 
         // asynchronously request the image and write it to the Images folder
         request({
@@ -126,7 +126,7 @@ function request_images(result) {
                 // console.log('   -- saving');
 
                 // write the file
-                fs.writeFile('Images/' + name, data, function (err) {
+                fs.writeFile(folder + '/' + name, data, function (err) {
                     if (err) { 
                         console.log('ERROR - ' + err); 
                     } else {
