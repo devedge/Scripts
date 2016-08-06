@@ -146,3 +146,18 @@ function request_images(result) {
 
 
 
+
+// Return a url that can safely be queried by the 'request' module
+function parse_url(input) {
+    // if the url starts with 'https://' or 'http://', don't add it
+    // else add 'http://', since there may not be an https connection
+
+    if ((input.match(/^https:\/\//) !== null) || 
+        (input.match(/^http:\/\//) !== null)) {
+
+        return input;
+    } else {
+        return 'http://' + input;
+    }
+}
+
