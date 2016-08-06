@@ -102,10 +102,6 @@ if (options.url !== undefined) {
 // Iterate over all the images and download them
 function request_images(result) {
 
-    // if the folder already exists, mkdirp will ignore
-    // mkdirp.sync();
-    // console.log('Saving to %s', folder);
-
     // console.log('Starting array loop');
 
     result.images.forEach(function (imgstring) {
@@ -122,8 +118,6 @@ function request_images(result) {
         }, function (err, resp, data) {
             if (!err && resp.statusCode === 200) {
 
-                // console.log('   -- saving');
-
                 // write the file
                 fs.writeFile(folder + '/' + name, data, function (err) {
                     if (err) { 
@@ -134,11 +128,9 @@ function request_images(result) {
                 });
 
             } else {
-                eventEmitter.emit('error', 'Image request failed', err, false);
+                eventEmitter.emit('error', 'Image request failed', err + ' (' + imgstring.src + ')' , false);
             }
         });
-        
-
     });
 }
 
