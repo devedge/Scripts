@@ -40,6 +40,7 @@ eventEmitter.on('error', function(message, err, printusage) {
         console.log(colors.red('ERROR') + ' - ' + message);
     }
 
+    // Print usage
     if (printusage) {
         console.log('');
         console.log('Usage: image-dl -u <link to scrape> -f <folder to save images>');
@@ -50,26 +51,15 @@ eventEmitter.on('error', function(message, err, printusage) {
 });
 
 
+eventEmitter.on('start', function(link) {
 
-// Program start
-if (options.url !== undefined) {
-
-    if (options.folder === undefined) {
-
-        // use the url as the folder name
-        folder = sanitize(options.url.match('[^/]*$')[0]);
-        mkdirp.sync(folder);
-
-    } else {
-        folder = options.folder;
-
-        // check that the specified folder exists
-
-    }
+    // instead of immediately scraping images, determine what kind of scraping
+    // needs to be done (image, links, etc)
+    // that way, different modules for scraping different sites can be implemented
 
 
     // Run the image collector on the url
-    ineed.collect.images.from(parse_url(options.url), function (err, response, result) {
+    ineed.collect.images.from(parse_url(link), function (err, response, result) {
 
         if (err) {
             eventEmitter.emit('error', 'Link request failed', err, false);
@@ -92,28 +82,23 @@ if (options.url !== undefined) {
 
         }
     });
-
-} else {
-    eventEmitter.emit('error', 'A url must be specified', null, true);
-}
-
+});
 
 
 // Iterate over all the images and download them
 function request_images(result) {
 
-    // console.log('Starting array loop');
-
     result.images.forEach(function (imgstring) {
 
         // remove any invalid characters from the name
-        var name = sanitize(imgstring.src.match('[^/]*$')[0]);
+        var imglink = imgstring.src;
+        var name = sanitize(imglink.match('[^/]*$')[0]);
 
         // console.log('   -- requesting: ' + imgstring.src);
 
         // asynchronously request the image and write it to the Images folder
         request({
-            uri: imgstring.src,
+            uri: imglink,
             encoding: null      // needed for writing the image as binary data
         }, function (err, resp, data) {
             if (!err && resp.statusCode === 200) {
@@ -123,17 +108,16 @@ function request_images(result) {
                     if (err) { 
                         console.log('ERROR - ' + err); 
                     } else {
-                        console.log(colors.green('DONE') + ' - ' + imgstring.src);
+                        console.log(colors.green('DONE') + ' - ' + imglink);
                     }
                 });
 
             } else {
-                eventEmitter.emit('error', 'Image request failed', err + ' (' + imgstring.src + ')' , false);
+                eventEmitter.emit('error', 'Image request failed', err + ' (' + imglink + ')' , false);
             }
         });
     });
 }
-
 
 
 // Return a url that can safely be queried by the 'request' module
@@ -149,3 +133,25 @@ function parse_url(input) {
         return 'http://' + input;
     }
 }
+
+
+// start
+switch (options.url) {
+    case undefined:
+        eventEmitter.emit('error', 'A url must be specified', null, true);
+        break;
+        
+    default:
+        if (options.folder === undefined) {
+            // use the url as the folder name
+            folder = sanitize(options.url.match('[^/]*$')[0]);
+            mkdirp.sync(folder);
+
+        } else {
+            folder = options.folder;
+            // check that the specified folder exists?
+        }
+        eventEmitter.emit('start', options.url);
+}
+
+
