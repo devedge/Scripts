@@ -76,7 +76,7 @@ function process_html(recv_html) {
 
             // Process the css
             datauri = new Datauri();
-            itemlink = normalizeUrl(hrefAttrValue);
+            itemlink = resolve_shortlink(hrefAttrValue);
 
             console.log(colors.green('GET') + ' - ' + colors.green('(type: css): ') + itemlink);
 
@@ -91,7 +91,7 @@ function process_html(recv_html) {
 
             // Process the javascript
             datauri = new Datauri();
-            itemlink = normalizeUrl(srcAttrValue);
+            itemlink = resolve_shortlink(srcAttrValue);
 
             console.log(colors.green('GET') + ' - ' + colors.green('(type: js): ') + itemlink);
 
@@ -138,11 +138,22 @@ function process_html(recv_html) {
         })*/.fromHtml(recv_html);
 
 
-    // when everything's done, save the html with the filename
+    // save the html with the filename
     fs.writeFileSync('index.html', html);
+
+    console.log(colors.green('DONE') + ' - index.html');
 }
 
 
+// resolve a short link in the html source and append the root url if needed
+function resolve_shortlink(shortlink) {
+    var norm = normalizeUrl(shortlink);
 
+    if (norm.match(/^\/[^\/]/)) {
+        return link.match(/^https?:\/\/[^\/]*/)[0] + norm;
+    } else {
+        return norm;
+    }
+}
 
 
