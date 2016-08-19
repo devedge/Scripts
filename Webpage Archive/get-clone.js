@@ -75,11 +75,12 @@ function process_html(recv_html) {
     // minimize the html (before maximizing its size with the datauri)
     var content = new Minimize().parse(recv_html);
     
+    var ext;
     var res;
     var datauri;
     var itemlink;
 
-    // blocking function that reprocesses all the elements in 'recv_html'
+    // blocking function that reprocesses all the elements from the minimized html
     // after this is finished, the html is saved on disk
     var html = ineed.reprocess.stylesheets(function (pageurl, hrefAttrValue) {
 
@@ -111,46 +112,37 @@ function process_html(recv_html) {
             // return the js as the datauri scheme
             return datauri.content;
 
-        })/*.images(function (pageurl, srcAttrValue) {
+        }).images(function (pageurl, srcAttrValue) {
 
-            // Process the images
-            itemlink = abs_url(url, srcAttrValue);
+            // Process the image
+            datauri = new Datauri();
+            itemlink = resolve_shortlink(srcAttrValue);
 
-            var name = itemlink.match('[^/]*$')[0]
-                            .replace('&', '')
-                            .replace('<', '')
-                            .replace('>', '');
+            console.log(colors.green('GET') + ' - ' + colors.green('(type: img): ') + itemlink);
 
-            console.log('GET - (type: img): ' + itemlink);
-            // console.log('             name: ' + name);
+            // synchronously request the image
+            res = srequest('GET', itemlink);
+            // console.log('Image size: ' + res.body.length);
 
-            request({
-                method: 'GET',
-                uri: itemlink,
-                encoding: null,
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0'
-                }
-            }, function (err, resp, data) {
-                if (!err && resp.statusCode === 200) {
+            if (res.body.length > 500000) {
+                // warn that the image is too large, hasn't been downloaded, and return immediately
+                console.log(colors.red('WARN') + ' - Image too large ( > 500 kB), not downloaded');
+                return srcAttrValue
+            }
 
-                    fs.writeFile(home_folder + '/img/' + name, data, function (err) {
-                        if (err) { console.log(err); }
-                    });
+            // retrieve extension name
+            ext = itemlink.match(/\.[^\.]*$/)[0].match(/\.[a-z]*/)[0];
+            datauri.format(ext, res.body);
 
-                } else {
-                    console.log('ERROR: ' + err);
-                }
-            });
+            return datauri.content;
 
-            return filename + '/img/' + name;
-        })*/.fromHtml(content);
+        }).fromHtml(content);
 
 
     // save the html with the filename
     fs.writeFileSync(filename + '.html', html);
 
-    console.log(colors.green('DONE') + ' - ' + filename + '.html');
+    console.log(colors.green('DONE - ') + filename + '.html');
 }
 
 
