@@ -19,11 +19,12 @@ const request = require('request');
 const ineed = require('ineed');
 const mkdirp = require('mkdirp');
 const Datauri = require('datauri');
+const Minimize = require('minimize');
 const colors = require('colors/safe');
 const srequest = require('sync-request');
 const normalizeUrl = require('normalize-url');
 
-
+// The only argument required is the url
 var link = process.argv[2];
 
 if (!link) {
@@ -63,8 +64,11 @@ function request_root_page(link) {
 }
 
 
-// Embed the css, js (fonts?) and images into the html as datauri
+// Minimize the html and embed the css, js (fonts?) and images into the html as datauri
 function process_html(recv_html) {
+    
+    // minimize the html (before maximizing its size with the datauri)
+    var content = new Minimize().parse(recv_html);
     
     var res;
     var datauri;
@@ -135,7 +139,7 @@ function process_html(recv_html) {
             });
 
             return filename + '/img/' + name;
-        })*/.fromHtml(recv_html);
+        })*/.fromHtml(content);
 
 
     // save the html with the filename
@@ -155,5 +159,3 @@ function resolve_shortlink(shortlink) {
         return norm;
     }
 }
-
-
