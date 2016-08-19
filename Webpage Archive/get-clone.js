@@ -122,7 +122,6 @@ function process_html(recv_html) {
 
             // synchronously request the image
             res = srequest('GET', itemlink);
-            // console.log('Image size: ' + res.body.length);
 
             if (res.body.length > 500000) {
                 // warn that the image is too large, hasn't been downloaded, and return immediately
@@ -134,6 +133,7 @@ function process_html(recv_html) {
             ext = itemlink.match(/\.[^\.]*$/)[0].match(/\.[a-z]*/)[0];
             datauri.format(ext, res.body);
 
+            // return the image as the datauri scheme
             return datauri.content;
 
         }).fromHtml(content);
@@ -142,7 +142,7 @@ function process_html(recv_html) {
     // save the html with the filename
     fs.writeFileSync(filename + '.html', html);
 
-    console.log(colors.green('DONE - ') + filename + '.html');
+    console.log(colors.green('DONE: ') + filename + '.html');
 }
 
 
