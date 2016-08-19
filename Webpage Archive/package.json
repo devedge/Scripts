@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "colors": "^1.1.2",
     "datauri": "^1.0.4",
     "ineed": "^1.0.4",
     "mkdirp": "^0.5.1",

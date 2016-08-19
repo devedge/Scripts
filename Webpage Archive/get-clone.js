@@ -20,12 +20,51 @@ const ineed = require('ineed');
 const mkdirp = require('mkdirp');
 const Datauri = require('datauri');
 const normalizeUrl = require('normalize-url');
+const colors = require('colors/safe');
 
 var link = process.argv[2];
 
 if (!link) {
     console.log('ERR - A url must be passed in');
 } else {
-    console.log('Normalized url: ' + normalizeUrl(link));
+    console.log('Normalized url: ' + colors.green(normalizeUrl(link)));
 
 }
+
+
+
+function request_root_page(link) {
+
+    request({
+        method: 'GET',
+        uri: link,
+        encoding: 'utf-8'/*,
+        headers: {
+            // add options to specify header options
+        }*/
+    }, function (err, resp, html) {
+        if (err) {
+            // Log error to console
+            console.log(colors.red('ERR') + ' - ' + err);
+
+        } else if (resp.statusCode !== 200) {
+            // status code is not right, print error to console
+            console.log(colors.red('ERR') + ' - ' + resp.statusCode + ' - ' + resp.statusMessage);
+
+        } else {
+
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
