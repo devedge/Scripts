@@ -14,6 +14,7 @@
     "ineed": "^1.0.4",
     "mkdirp": "^0.5.1",
     "normalize-url": "^1.6.0",
-    "request": "^2.74.0"
+    "request": "^2.74.0",
+    "sync-request": "^3.0.1"
   }
 }
