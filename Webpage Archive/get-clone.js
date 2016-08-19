@@ -16,6 +16,7 @@
 const fs = require('fs');
 const request = require('request');
 
+
 const ineed = require('ineed');
 const mkdirp = require('mkdirp');
 const Datauri = require('datauri');
@@ -23,6 +24,7 @@ const Minimize = require('minimize');
 const colors = require('colors/safe');
 const srequest = require('sync-request');
 const normalizeUrl = require('normalize-url');
+const sanitize = require('sanitize-filename');
 
 // The only argument required is the url
 var link = process.argv[2];
@@ -66,6 +68,9 @@ function request_root_page(link) {
 
 // Minimize the html and embed the css, js (fonts?) and images into the html as datauri
 function process_html(recv_html) {
+
+    // Extract the page title for the filename and sanitize it
+    var filename = sanitize(ineed.collect.title.fromHtml(recv_html).title.substr(0,41));
     
     // minimize the html (before maximizing its size with the datauri)
     var content = new Minimize().parse(recv_html);
@@ -143,9 +148,9 @@ function process_html(recv_html) {
 
 
     // save the html with the filename
-    fs.writeFileSync('index.html', html);
+    fs.writeFileSync(filename + '.html', html);
 
-    console.log(colors.green('DONE') + ' - index.html');
+    console.log(colors.green('DONE') + ' - ' + filename + '.html');
 }
 
 

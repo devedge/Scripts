@@ -16,6 +16,7 @@
     "mkdirp": "^0.5.1",
     "normalize-url": "^1.6.0",
     "request": "^2.74.0",
+    "sanitize-filename": "^1.6.0",
     "sync-request": "^3.0.1"
   }
 }
