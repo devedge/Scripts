@@ -1,21 +1,20 @@
+#!/usr/bin/env node
 
-// downloads a webpage and formats everything into a single html document
-
-// issue warning about images that are too large 
-
+// - downloads a webpage and formats everything into a single html document
+// - issue warning about images that are too large 
+// - as a safety measure, only downloads scripts from the original base url
 
 // workflow
 // provide a url to the script when run
 // get the html
+// minimize the html to reduce filesize a little
 // use 'ineed' to find all js, css, images (and fonts?, etc..)
 // convert them all to data:uri format and embed it in the html
-// minimize the html to reduce filesize a little
 // save the html to disk
 
 
 const fs = require('fs');
 const request = require('request');
-
 
 const ineed = require('ineed');
 const mkdirp = require('mkdirp');
@@ -25,6 +24,8 @@ const colors = require('colors/safe');
 const srequest = require('sync-request');
 const normalizeUrl = require('normalize-url');
 const sanitize = require('sanitize-filename');
+
+var baseurl;
 
 // The only argument required is the url
 var link = process.argv[2];
@@ -59,6 +60,8 @@ function request_root_page(link) {
             console.log(colors.red('ERR') + ' - ' + resp.statusCode + ' - ' + resp.statusMessage);
 
         } else {
+            baseurl = link.match(/https?:\/\/[^\/]*/)[0].replace('https:\/\/', '').replace('http:\/\/', '');
+
             console.log('Embedding stylesheets, javascript, and images...');
             process_html(body);
         }
@@ -99,9 +102,16 @@ function process_html(recv_html) {
 
         }).scripts(function (pageurl, srcAttrValue) {
 
+            return '';
+
             // Process the javascript
             datauri = new Datauri();
             itemlink = resolve_shortlink(srcAttrValue);
+
+
+            if (baseurl !== itemlink.match(/https?:\/\/[^\/]*/)[0].replace('https:\/\/', '').replace('http:\/\/', '')) {
+                return '';
+            }
 
             console.log(colors.green('GET') + ' - ' + colors.green('(type: js): ') + itemlink);
 
@@ -111,6 +121,7 @@ function process_html(recv_html) {
 
             // return the js as the datauri scheme
             return datauri.content;
+
 
         }).images(function (pageurl, srcAttrValue) {
 
