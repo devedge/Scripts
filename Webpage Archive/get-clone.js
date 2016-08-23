@@ -102,8 +102,6 @@ function process_html(recv_html) {
 
         }).scripts(function (pageurl, srcAttrValue) {
 
-            return '';
-
             // Process the javascript
             datauri = new Datauri();
             itemlink = resolve_shortlink(srcAttrValue);
