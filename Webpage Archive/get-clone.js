@@ -108,7 +108,7 @@ function process_html(recv_html) {
 
 
             if (baseurl !== itemlink.match(/https?:\/\/[^\/]*/)[0].replace('https:\/\/', '').replace('http:\/\/', '')) {
-                return '';
+                //return '';
             }
 
             console.log(colors.green('GET') + ' - ' + colors.green('(type: js): ') + itemlink);
