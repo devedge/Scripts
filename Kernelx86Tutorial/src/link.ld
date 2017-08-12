@@ -12,6 +12,7 @@ SECTIONS
     *(.text)
     . = ALIGN(4096);
   }
+
   .data :
   {
     data = .; _data = .; __data = .;
@@ -19,6 +20,7 @@ SECTIONS
     *(.rodata)
     . = ALIGN(4096);
   }
+  
   .bss :
   {
     bss = .; _bss = .; __bss = .;
