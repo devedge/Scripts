@@ -2,7 +2,7 @@
 # The C and C++ rules are already setup by default.
 # The only one that needs changing is the assembler
 # rule, as we use nasm instead of GNU as.
-
+#monitor.o common.o
 SOURCES=boot.o main.o
 CFLAGS=-nostdlib -nostdinc -fno-builtin -fno-stack-protector
 LDFLAGS=-Tlink.ld

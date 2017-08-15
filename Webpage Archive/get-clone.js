@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // - downloads a webpage and formats everything into a single html document
-// - issue warning about images that are too large 
+// - issue warning about images that are too large
 // - as a safety measure, only downloads scripts from the original base url
 
 // workflow
@@ -15,6 +15,8 @@
 
 const fs = require('fs');
 const request = require('request');
+
+
 
 const ineed = require('ineed');
 const mkdirp = require('mkdirp');
@@ -74,10 +76,10 @@ function process_html(recv_html) {
 
     // Extract the page title for the filename and sanitize it
     var filename = sanitize(ineed.collect.title.fromHtml(recv_html).title.substr(0,41));
-    
+
     // minimize the html (before maximizing its size with the datauri)
     var content = new Minimize().parse(recv_html);
-    
+
     var ext;
     var res;
     var datauri;
